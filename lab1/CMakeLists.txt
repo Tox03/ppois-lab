@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if(MSVC)
     add_compile_options(/utf-8)
+    # Генерируем PDB-файлы для анализа покрытия OpenCppCoverage
+    add_compile_options("$<$<CONFIG:Release>:/Zi>")
+    add_link_options("$<$<CONFIG:Release>:/DEBUG>")
 endif()
 
 # Include directories
