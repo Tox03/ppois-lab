@@ -11,61 +11,45 @@ permissions:
 
 jobs:
   # ==========================================
-  # Лабораторная 1: Абстрактные машины (C++ на Linux)
+  # Лабораторная 1: Абстрактные машины (C++ на Windows)
   # ==========================================
-  build-cpp-lab1:
-    runs-on: ubuntu-latest
+  build-cpp-lab1-windows:
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Tools
+      - name: Install Tools (cppcheck, OpenCppCoverage)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cppcheck lcov cmake
-
-      - name: Cache GTest dependencies
-        uses: actions/cache@v4
-        with:
-          path: lab1/build/_deps
-          key: ${{ runner.os }}-gtest-lab1-${{ hashFiles('lab1/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-gtest-lab1-
+          choco install cppcheck opencppcoverage -y
+          echo "C:\Program Files\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:\Program Files\Cppcheck" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Run Linter (cppcheck)
-        run: cppcheck --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab1/build/ lab1/
-
-      - name: Configure and Build
         run: |
-          cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
-          cmake --build lab1/build -j$(nproc)
+          & "C:\Program Files\Cppcheck\cppcheck.exe" --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab1/build/ lab1/
 
-      - name: Run Unit Tests
-        run: ./lab1/build/AllTests
-
-      - name: Verify Code Coverage
+      - name: Configure and Build (MSVC Release)
         run: |
-          lcov --capture --directory lab1/build --output-file lab1_coverage.info --ignore-errors mismatch,gcov,inconsistent,unsupported,format
-          lcov --remove lab1_coverage.info '/usr/*' '*/_deps/*' '*/tests/*' '*/test*.cpp' '*/src/main.cpp' '*/src/ui/*' --output-file lab1_coverage_clean.info --ignore-errors unused,empty,mismatch,inconsistent,format
-          lcov --list lab1_coverage_clean.info --ignore-errors unused,empty,mismatch,inconsistent,format
-          
-          # Проверка порога покрытия (минимум 90%)
-          COVERAGE=$(lcov --summary lab1_coverage_clean.info --ignore-errors unused,empty,mismatch,inconsistent,format | grep lines | awk '{print $2}' | tr -d '%')
-          echo "Текущее покрытие Lab 1: $COVERAGE%"
-          awk -v cov="$COVERAGE" 'BEGIN { if (cov < 90.0) { print "Ошибка: покрытие ниже 90% (" cov "%)"; exit 1 } else { print "Покрытие в норме (" cov "%)" } }'
+          cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build lab1/build --config Release --parallel
 
-      - name: Upload Artifact
+      - name: Run Unit Tests and Verify Coverage (>90%)
+        run: |
+          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab1\src\turing" --sources "$((Get-Location).Path)\lab1\src\markov" --threshold 90 --export_type html:coverage_html -- .\lab1\build\Release\AllTests.exe
+
+      - name: Upload Artifact (.exe)
         uses: actions/upload-artifact@v4
         with:
-          name: ppois_lab1_linux
-          path: lab1/build/ppois-lab1
+          name: ppois_lab1_windows
+          path: lab1/build/Release/ppois-lab1.exe
 
   # ==========================================
-  # Публикация артефактов в GitHub Releases
+  # Публикация релиза на GitHub Releases
   # ==========================================
   publish-release:
-    needs: [build-cpp-lab1]
-    runs-on: ubuntu-latest
+    needs: [build-cpp-lab1-windows]
+    runs-on: windows-latest
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Download all artifacts
@@ -77,7 +61,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "latest"
-          name: "Релизы лабораторных работ"
+          name: "Релизы лабораторных работ (Windows)"
           files: artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
