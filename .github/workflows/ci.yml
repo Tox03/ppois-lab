@@ -1,0 +1,83 @@
+name: CI/CD Pipeline (All Labs)
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+permissions:
+  contents: write
+
+jobs:
+  # ==========================================
+  # Лабораторная 1: Абстрактные машины (C++ на Linux)
+  # ==========================================
+  build-cpp-lab1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck lcov cmake
+
+      - name: Cache GTest dependencies
+        uses: actions/cache@v4
+        with:
+          path: lab1/build/_deps
+          key: ${{ runner.os }}-gtest-lab1-${{ hashFiles('lab1/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gtest-lab1-
+
+      - name: Run Linter (cppcheck)
+        run: cppcheck --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab1/build/ lab1/
+
+      - name: Configure and Build
+        run: |
+          cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+          cmake --build lab1/build -j$(nproc)
+
+      - name: Run Unit Tests
+        run: ./lab1/build/AllTests
+
+      - name: Verify Code Coverage
+        run: |
+          lcov --capture --directory lab1/build --output-file lab1_coverage.info --ignore-errors mismatch,gcov,inconsistent,unsupported,format
+          lcov --remove lab1_coverage.info '/usr/*' '*/_deps/*' '*/tests/*' '*/test*.cpp' '*/src/main.cpp' '*/src/ui/*' --output-file lab1_coverage_clean.info --ignore-errors unused,empty,mismatch,inconsistent,format
+          lcov --list lab1_coverage_clean.info --ignore-errors unused,empty,mismatch,inconsistent,format
+          
+          # Проверка порога покрытия (минимум 90%)
+          COVERAGE=$(lcov --summary lab1_coverage_clean.info --ignore-errors unused,empty,mismatch,inconsistent,format | grep lines | awk '{print $2}' | tr -d '%')
+          echo "Текущее покрытие Lab 1: $COVERAGE%"
+          awk -v cov="$COVERAGE" 'BEGIN { if (cov < 90.0) { print "Ошибка: покрытие ниже 90% (" cov "%)"; exit 1 } else { print "Покрытие в норме (" cov "%)" } }'
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppois_lab1_linux
+          path: lab1/build/ppois-lab1
+
+  # ==========================================
+  # Публикация артефактов в GitHub Releases
+  # ==========================================
+  publish-release:
+    needs: [build-cpp-lab1]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "latest"
+          name: "Релизы лабораторных работ"
+          files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
