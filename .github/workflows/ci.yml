@@ -59,10 +59,49 @@ jobs:
           path: lab1/build/Release/ppois-lab1.exe
 
   # ==========================================
+  # Лабораторная 2: Завод автодеталей (Python)
+  # ==========================================
+  test-python-lab2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install coverage flake8
+
+      - name: Lint with flake8
+        run: |
+          flake8 --config=lab2/.flake8 lab2
+
+      - name: Run Unit Tests and Verify Coverage (>=90%)
+        run: |
+          python -m coverage run --source=lab2/plant,lab2/cli -m unittest discover -s lab2/tests -p "test_*.py" -v
+          python -m coverage report --fail-under=90
+
+      - name: Package Lab2 Artifact
+        run: |
+          mkdir -p dist
+          zip -r dist/ppois_lab2_python.zip lab2/ -x "lab2/__pycache__/*" "lab2/*/__pycache__/*"
+
+      - name: Upload Artifact (zip)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppois_lab2_python
+          path: dist/ppois_lab2_python.zip
+
+  # ==========================================
   # Публикация релиза на GitHub Releases
   # ==========================================
   publish-release:
-    needs: [build-cpp-lab1-windows]
+    needs: [build-cpp-lab1-windows, test-python-lab2]
     runs-on: windows-latest
     if: github.ref == 'refs/heads/main'
     steps:
