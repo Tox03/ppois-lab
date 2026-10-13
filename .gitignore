@@ -61,3 +61,6 @@ __pycache__/
 .coverage.*
 htmlcov/
 *.pytest_cache/
+dist/
+build_pyinstaller/
+*.spec
