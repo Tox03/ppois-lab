@@ -35,6 +35,11 @@ class TestEquipmentSuite(unittest.TestCase):
         m.current_temperature = 85.0
         with self.assertRaises(EquipmentOverheatException):
             m.start()
+        with self.assertRaises(ValueError):
+            m.record_hours(-5.0)
+        m_broken = Machine("СТК-СЛОМАН", "HAAS", 10.0, 20.0, is_operational=False)
+        with self.assertRaises(MachineMalfunctionException):
+            m_broken.start()
 
     def test_tooling_fixture_and_cutting_tool(self):
         fixture = ToolingFixture("ШТАМП-01", "Вырубной", 999, 1000)
@@ -50,6 +55,8 @@ class TestEquipmentSuite(unittest.TestCase):
         self.assertTrue(tool.is_usable())
         tool.apply_cut_wear(0.1)
         self.assertEqual(tool.flank_wear_mm, 0.2)
+        with self.assertRaises(ValueError):
+            tool.apply_cut_wear(-0.1)
         with self.assertRaises(ToolWearExceededException):
             tool.apply_cut_wear(0.15)
         tool.regrind()
@@ -71,17 +78,57 @@ class TestEquipmentSuite(unittest.TestCase):
         cnc.set_spindle_speed(12000)
         self.assertEqual(cnc.spindle_rpm, 12000)
 
+        with self.assertRaises(ValueError):
+            cnc.set_spindle_speed(50)
+        with self.assertRaises(ValueError):
+            cnc.set_spindle_speed(50000)
+
+        bad_tool = CuttingTool("ФРЕЗА-ИЗНОС", "ВК8", 0.5, 0.3, is_sharp=False)
+        with self.assertRaises(MachineMalfunctionException):
+            cnc.mount_tool(bad_tool)
+
+        m2.is_operational = False
+        with self.assertRaises(MachineMalfunctionException):
+            cnc.mill_contour(500.0, 2.0)
+
+        cnc_no_tool = CncMillingMachine(3, 3000, m1, active_tool=None)
+        with self.assertRaises(MachineMalfunctionException):
+            cnc_no_tool.mill_contour(500.0, 2.0)
+
     def test_welding_and_painting(self):
         m_weld = Machine("РОБОТ-СВАРКА", "KUKA-KR16", 100.0, 30.0)
         robot = WeldingRobot(220.0, 15.0, m_weld, "Св-08Г2С")
+        robot.ignite_arc()
+        self.assertTrue(robot.arc_ignited)
+        robot.extinguish_arc()
+        self.assertFalse(robot.arc_ignited)
         duration = robot.perform_seam_weld(30.0)
         self.assertGreater(duration, 0)
+        m_weld.is_operational = False
+        with self.assertRaises(MachineMalfunctionException):
+            robot.ignite_arc()
+
+        m_weld_ok = Machine("РОБОТ-2", "KUKA", 10.0, 20.0)
+        low_gas_robot = WeldingRobot(220.0, 5.0, m_weld_ok, "Св-08Г2С")
+        with self.assertRaises(MachineMalfunctionException):
+            low_gas_robot.ignite_arc()
 
         m_paint = Machine("ПОКРАСКА-БАЗА", "WAGNER-PXE", 20.0, 25.0)
         booth = PaintingBooth(0.4, "RAL 9005", 45.0, m_paint)
         self.assertTrue(booth.apply_powder_coat(65.0))
         self.assertTrue(booth.bake_paint(200.0, 15.0))
         booth.ventilate()
+        with self.assertRaises(ValueError):
+            booth.bake_paint(150.0, 10.0)
+        with self.assertRaises(ValueError):
+            booth.bake_paint(300.0, 10.0)
+        m_paint.is_operational = False
+        with self.assertRaises(MachineMalfunctionException):
+            booth.apply_powder_coat(50.0)
+        m_booth_ok = Machine("ПОКРАСКА-ОК", "WAGNER", 10.0, 20.0, is_operational=True)
+        humid_booth = PaintingBooth(0.4, "RAL 9005", 85.0, m_booth_ok)
+        with self.assertRaises(MachineMalfunctionException):
+            humid_booth.apply_powder_coat(50.0)
 
     def test_furnace_and_laser(self):
         m_furnace = Machine("ПЕЧЬ-01", "NABERTHERM", 300.0, 20.0)

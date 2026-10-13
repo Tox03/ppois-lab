@@ -60,6 +60,8 @@ class TestPersonnelSuite(unittest.TestCase):
         self.assertTrue(engineer.perform_preventive_maintenance(m))
         self.assertTrue(m.is_operational)
         self.assertTrue(engineer.is_expert())
+        engineer.repair_breakdown(m, "Аварийная замена муфты")
+        self.assertEqual(m.current_temperature, 25.0)
 
         tool_emp = Employee("ТН-04", "Кузнецов К.К.", "Слесарь-инструментальщик", 2300.0, self.ci)
         toolmaker = Toolmaker(tool_emp, "Штампы")
@@ -75,6 +77,9 @@ class TestPersonnelSuite(unittest.TestCase):
         officer = SafetyOfficer(safe_emp)
         with self.assertRaises(SafetyViolationException):
             officer.conduct_line_audit(False, "ТН-01")
+        officer.conduct_line_audit(True, "ТН-01")
+        officer.update_policy("ISO-45001-v3")
+        self.assertEqual(officer.safety_policy_version, "ISO-45001-v3")
         self.assertIn("ПРЕДПИСАНИЕ", officer.issue_violation("ТН-01", "Работа без очков"))
 
         super_emp = Employee("ТН-06", "Смирнов С.С.", "Мастер смены", 2600.0, self.ci)
@@ -89,7 +94,16 @@ class TestPersonnelSuite(unittest.TestCase):
         director = PlantDirector(dir_emp, annual_budget=500000.0, strategic_plan_name="Модернизация 2026")
         self.assertTrue(director.authorize_line_expansion("Новая линия поршней", 150000.0))
         self.assertEqual(director.annual_budget, 350000.0)
+        self.assertFalse(director.authorize_line_expansion("Сверхдорогой проект", 9999999.0))
+        with self.assertRaises(ValueError):
+            director.approve_budget_expense(-100.0, "Ошибка")
         self.assertIn("Федоров", director.sign_annual_report())
+
+    def test_employee_edge_cases(self):
+        with self.assertRaises(ValueError):
+            self.emp.promote("Инженер", -10.0)
+        self.emp.promote("Главный директор цеха", 5.0)
+        self.assertTrue(self.emp.is_management())
 
 if __name__ == "__main__":
     unittest.main()

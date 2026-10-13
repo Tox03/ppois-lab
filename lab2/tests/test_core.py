@@ -49,6 +49,8 @@ class TestCoreEntitiesSuite(unittest.TestCase):
 
         with self.assertRaises(InvalidSpecificationException):
             spec.validate_roughness(-0.5)
+        with self.assertRaises(InvalidSpecificationException):
+            spec.verify_strength(-10.0)
 
     def test_serial_number(self):
         sn = SerialNumber("PST", 2026, 42)

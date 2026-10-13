@@ -35,6 +35,13 @@ class TestLogisticsSuite(unittest.TestCase):
         pallet = ShippingPallet("ПАЛЛЕТ-1", max_capacity_parts=2, max_weight_kg=50.0)
         self.assertTrue(pallet.load_part(self.part, 10.0))
         self.assertFalse(pallet.is_full())
+
+        bad_part = AutoPart("ДЕТ-БРАК", self.sn, "Поршень с браком", self.dim, self.spec, is_defect_free=False)
+        with self.assertRaises(ValueError):
+            pallet.load_part(bad_part, 5.0)
+
+        with self.assertRaises(StorageExhaustedException):
+            pallet.load_part(self.part, 100.0)
         
         sn2 = SerialNumber("PLT", 2026, 2)
         part2 = AutoPart("ДЕТ-2", sn2, "Поршень", self.dim, self.spec)
@@ -52,17 +59,30 @@ class TestLogisticsSuite(unittest.TestCase):
 
     def test_customer_and_order(self):
         self.assertTrue(self.customer.is_major_automaker())
-        discount = self.customer.apply_loyalty_discount(50000)
-        self.assertEqual(discount, 0.08)
+        small_customer = Customer("КЛ-02", "ИП Ремонт", self.ci, self.addr)
+        self.assertFalse(small_customer.is_major_automaker())
+
+        self.assertEqual(self.customer.apply_loyalty_discount(150000), 0.15)
+        self.assertEqual(self.customer.apply_loyalty_discount(50000), 0.08)
+        self.assertEqual(self.customer.apply_loyalty_discount(5000), 0.02)
         self.assertIn("БелДжи", self.customer.format_customer_card())
 
         order = CustomerOrder("ДОГОВОР-101", self.customer)
         order.add_part_order("Поршень ДВС", 1000, 25.0)
         self.assertEqual(order.total_price, 25000.0)
+        with self.assertRaises(ValueError):
+            order.add_part_order("Брак", -10, 10.0)
+        with self.assertRaises(ValueError):
+            order.add_part_order("Брак", 10, -5.0)
+
         final_price = order.calculate_final_price()
-        self.assertEqual(final_price, round(25000.0 * 0.92, 2))
+        self.assertEqual(final_price, round(25000.0 * 0.98, 2))
         order.dispatch()
         self.assertTrue(order.is_dispatched)
+
+        empty_order = CustomerOrder("ДОГОВОР-ПУСТОЙ", self.customer)
+        with self.assertRaises(RuntimeError):
+            empty_order.dispatch()
 
     def test_delivery_vehicle_and_dispatch_order(self):
         truck = DeliveryVehicle("AI-7777-7", carrying_capacity_tons=20.0)
@@ -77,6 +97,9 @@ class TestLogisticsSuite(unittest.TestCase):
         self.assertIn("убыл в рейс", depart_msg)
         with self.assertRaises(RuntimeError):
             truck.load_pallet(1.0)
+
+        truck_zero = DeliveryVehicle("AI-0000-0", carrying_capacity_tons=0.0)
+        self.assertEqual(truck_zero.get_load_factor(), 1.0)
 
         truck.is_ready = True
         order = CustomerOrder("ДОГОВОР-102", self.customer)

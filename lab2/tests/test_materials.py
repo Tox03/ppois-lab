@@ -92,6 +92,20 @@ class TestMaterialsSuite(unittest.TestCase):
         with self.assertRaises(StorageExhaustedException):
             bin_box.deposit_material(900.0)
 
+        locked_bin = StorageBin("ЯЧ-БЛОК", 500.0, is_locked=True)
+        with self.assertRaises(RuntimeError):
+            locked_bin.deposit_material(10.0)
+
+        with self.assertRaises(ValueError):
+            bin_box.deposit_material(-10.0)
+        with self.assertRaises(ValueError):
+            bin_box.withdraw_material(-5.0)
+        with self.assertRaises(ValueError):
+            bin_box.withdraw_material(10000.0)
+
+        zero_bin = StorageBin("ЯЧ-НОЛЬ", 0.0)
+        self.assertEqual(zero_bin.get_occupancy_ratio(), 1.0)
+
         addr = Address("РБ", "Минск", "Заводская, 1", "220000")
         wh = MaterialWarehouse("СКЛАД-01", addr, 50.0)
         wh.add_bin(bin_box)

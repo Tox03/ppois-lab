@@ -99,5 +99,33 @@ class TestCliSuite(unittest.TestCase):
         cli.run(auto_input=commands)
         self.assertEqual(cli.plant.active_orders[0].status, "В_ПРОИЗВОДСТВЕ")
 
+    def test_cli_empty_collections_and_subchoices(self):
+        """Проверяет вызовы операций при пустых списках нарядов/ТТН и неизвестных подоперациях."""
+        cli = PlantCli()
+        cli.plant.active_orders.clear()
+        cli.active_dispatches.clear()
+        # 3 (нет нарядов), 6 (нет ТТН), 4 -> 99 (неизвестно), 7 -> 99, 8 -> 99, 0
+        commands = ["3", "6", "4", "99", "7", "99", "8", "99", "0"]
+        cli.run(auto_input=commands)
+
+    def test_cli_defective_part_inspection(self):
+        """Проверяет сценарий ОТК при обнаружении брака детали."""
+        cli = PlantCli()
+        # 9 (ОТК) с бракованным размером 90.0 мм, 0
+        commands = ["9", "90.0", "0"]
+        cli.run(auto_input=commands)
+
+    def test_cli_prompt_fallback_on_eof(self):
+        """Проверяет корректное возвращение дефолтного значения при EOFError в консоли."""
+        cli = PlantCli()
+        cli._input_gen = None
+        import unittest.mock as mock
+        with mock.patch("builtins.input", side_effect=EOFError):
+            result = cli._prompt("Введите значение", "дефолт")
+            self.assertEqual(result, "дефолт")
+        with mock.patch("builtins.input", side_effect=KeyboardInterrupt):
+            result2 = cli._prompt("Введите значение", "дефолт2")
+            self.assertEqual(result2, "дефолт2")
+
 if __name__ == "__main__":
     unittest.main()

@@ -57,7 +57,8 @@ class TestQualitySuite(unittest.TestCase):
         self.assertTrue(scanner.is_high_accuracy())
         with self.assertRaises(CalibrationExpiredException):
             scanner.scan_part_cloud(self.part, points_count=1000)
-        scanner.calibration_tool = None
+        calib_ok = CalibrationTool("ЭТАЛОН-ХОР", "Мера", "2026-01-01", 365)
+        scanner.calibrate(calib_ok)
         self.assertTrue(scanner.scan_part_cloud(self.part, points_count=1000))
         self.assertEqual(scanner.points_scanned, 1000)
 
@@ -66,10 +67,15 @@ class TestQualitySuite(unittest.TestCase):
         tensile = TensileTester("РМ-100", max_force_kn=100.0, calibration_tool=calib_bad)
         with self.assertRaises(CalibrationExpiredException):
             tensile.execute_pull_test(self.spec, 550.0)
-        tensile.calibration_tool = None
+        calib_ok = CalibrationTool("ЭТАЛОН-СИЛЫ", "Датчик", "2026-01-01", 365)
+        tensile.calibrate(calib_ok)
         self.assertTrue(tensile.execute_pull_test(self.spec, 550.0))
         self.assertEqual(tensile.tests_executed, 1)
         self.assertGreater(tensile.get_utilization(500), 0)
+        self.assertEqual(tensile.get_utilization(0), 100.0)
+        from plant.exceptions.invalid_specification_exception import InvalidSpecificationException
+        with self.assertRaises(InvalidSpecificationException):
+            tensile.execute_pull_test(self.spec, -10.0)
 
         hardness = HardnessTester("ТР-01", "HRC_Роквелл", calibration_tool=calib_bad)
         shaft = GearboxShaft(self.part, 25, 50.0, 16)

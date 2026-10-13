@@ -35,9 +35,13 @@ class TestProductionSuite(unittest.TestCase):
     def test_work_station(self):
         ws = WorkStation("ПОСТ-01", self.machine)
         self.assertFalse(ws.is_active)
+        self.assertFalse(ws.process_part_cycle())
         ws.assign_operator(self.operator)
         self.assertTrue(ws.is_active)
         self.assertTrue(ws.process_part_cycle())
+        self.machine.is_operational = False
+        self.assertFalse(ws.process_part_cycle())
+        self.machine.is_operational = True
         ws.release_station()
         self.assertFalse(ws.is_active)
 
@@ -48,6 +52,10 @@ class TestProductionSuite(unittest.TestCase):
         proc.optimize_duration(0.1)
         self.assertEqual(proc.duration_minutes, 1.35)
         self.assertFalse(proc.is_thermal_process())
+        with self.assertRaises(ValueError):
+            proc.calculate_power_cost(-1.0)
+        with self.assertRaises(ValueError):
+            proc.optimize_duration(2.0)
 
     def test_production_line_and_exceptions(self):
         line = ProductionLine("ЛИНИЯ-1", "Линия штамповки", max_allowed_scrap_pct=2.5)
@@ -61,22 +69,32 @@ class TestProductionSuite(unittest.TestCase):
 
         with self.assertRaises(DefectThresholdExceededException):
             line.record_scrap(total_produced=100, total_defective=5)
+        self.assertEqual(line.record_scrap(0, 0), 0.0)
 
     def test_work_shift(self):
         s_emp = Employee("ТН-20", "Сергеев С.", "Мастер", 2800.0, self.ci)
         supervisor = ShiftSupervisor(s_emp, "СМЕНА-ДЕНЬ", 10)
         shift = WorkShift("СМ-01", "ДНЕВНАЯ", supervisor, hours_duration=8.0)
         self.assertFalse(shift.is_night_shift())
-        self.assertEqual(shift.calculate_hourly_productivity(400), 50.0)
+        shift.hours_duration = 0.0
+        self.assertEqual(shift.calculate_hourly_productivity(100), 0.0)
+        self.assertIn("100", shift.record_shift_output(100))
 
     def test_production_plan_and_order(self):
         plan = ProductionPlan("ПЛАН-2026-10", planned_quantity=1000, deadline_date="2026-10-31")
         plan.register_output(400)
         self.assertEqual(plan.calculate_fulfillment_percentage(), 40.0)
         self.assertFalse(plan.is_plan_fulfilled())
+        with self.assertRaises(ValueError):
+            plan.register_output(-50)
+        empty_plan = ProductionPlan("ПЛАН-0", planned_quantity=0, deadline_date="2026-10-31")
+        self.assertEqual(empty_plan.calculate_fulfillment_percentage(), 100.0)
 
         order = ProductionOrder("НАРЯД-01", "Поршень ДВС", 500)
         order.link_plan(plan)
+        with self.assertRaises(RuntimeError):
+            order.complete_order()
+
         order.start_production(max_capacity=1000)
         self.assertEqual(order.status, "В_ПРОИЗВОДСТВЕ")
         order.complete_order()
@@ -94,10 +112,14 @@ class TestProductionSuite(unittest.TestCase):
         self.assertEqual(meter.calculate_energy_bill(), 15.0)
         meter.reset_monthly_counter()
         self.assertEqual(meter.total_kwh, 0.0)
+        with self.assertRaises(ValueError):
+            meter.record_consumption(-10.0)
 
         scrap = ScrapRecord("АКТ-01", "Трещина после закалки", 12, "2026-10-12")
         self.assertEqual(scrap.calculate_financial_loss(50.0), 600.0)
         self.assertFalse(scrap.is_critical_scrap(50))
+        with self.assertRaises(ValueError):
+            scrap.calculate_financial_loss(-10.0)
         self.assertIn("АКТ-01", scrap.format_summary())
 
 if __name__ == "__main__":
