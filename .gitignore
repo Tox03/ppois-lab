@@ -53,3 +53,15 @@ Thumbs.db
 .DS_Store
 *.tmp
 *.log
+
+# Python артефакты и кэши
+__pycache__/
+*.py[cod]
+*$py.class
+.coverage
+.coverage.*
+htmlcov/
+*.pytest_cache/
+dist/
+build_pyinstaller/
+*.spec
