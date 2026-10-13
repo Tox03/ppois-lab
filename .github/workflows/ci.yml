@@ -1,4 +1,4 @@
-name: CI/CD Pipeline (All Labs)
+name: "Лабораторная работа №2: Завод автодеталей"
 
 on:
   push:
@@ -10,58 +10,8 @@ permissions:
   contents: write
 
 jobs:
-  # ==========================================
-  # Лабораторная 1: Абстрактные машины (C++ на Windows)
-  # ==========================================
-  build-cpp-lab1-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Tools (cppcheck, OpenCppCoverage)
-        run: |
-          choco install cppcheck opencppcoverage -y
-          echo "C:\Program Files\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\Program Files\Cppcheck" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-      - name: Run Linter (cppcheck)
-        run: |
-          & "C:\Program Files\Cppcheck\cppcheck.exe" --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab1/build/ lab1/
-
-      - name: Configure and Build (MSVC Release)
-        run: |
-          cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Release
-          cmake --build lab1/build --config Release --parallel
-
-      - name: Run Unit Tests and Verify Coverage (>90%)
-        run: |
-          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --modules "$((Get-Location).Path)\lab1\build\Release\AllTests.exe" --sources "$((Get-Location).Path)\lab1\src\turing" --sources "$((Get-Location).Path)\lab1\src\markov" --export_type html:coverage_html --export_type cobertura:coverage.xml -- .\lab1\build\Release\AllTests.exe
-          [xml]$xml = Get-Content coverage.xml
-          $linesValid = [int]$xml.coverage.'lines-valid'
-          $linesCovered = [int]$xml.coverage.'lines-covered'
-          $rate = [math]::Round([double]$xml.coverage.'line-rate' * 100, 2)
-          Write-Host "Всего строк: $linesValid, Покрыто строк: $linesCovered"
-          Write-Host "Общее покрытие кода: $rate%"
-          if ($linesValid -eq 0) {
-            Write-Error "Ошибка: OpenCppCoverage не нашел анализируемых строк кода (PDB не загружен)!"
-            exit 1
-          }
-          if ($rate -lt 90.0) {
-            Write-Error "Покрытие кода ниже 90%: $rate%"
-            exit 1
-          }
-
-      - name: Upload Artifact (.exe)
-        uses: actions/upload-artifact@v4
-        with:
-          name: ppois_lab1_windows
-          path: lab1/build/Release/ppois-lab1.exe
-
-  # ==========================================
-  # Лабораторная 2: Завод автодеталей (Python на Windows)
-  # ==========================================
   test-python-lab2:
+    name: "Тестирование, анализ покрытия и сборка ЛР №2"
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -83,7 +33,7 @@ jobs:
 
       - name: Run Unit Tests and Verify Coverage (>=90%)
         run: |
-          python -m coverage run --source=lab2/plant,lab2/cli -m unittest discover -s lab2/tests -p "test_*.py" -v
+          python -m coverage run --source=lab2/plant,lab2/cli,lab2/main -m unittest discover -s lab2/tests -p "test_*.py" -v
           python -m coverage report --fail-under=90
 
       - name: Build Standalone Executable (.exe)
@@ -95,25 +45,3 @@ jobs:
         with:
           name: ppois_lab2_windows
           path: lab2/dist/ppois-lab2.exe
-
-  # ==========================================
-  # Публикация релиза на GitHub Releases
-  # ==========================================
-  publish-release:
-    needs: [build-cpp-lab1-windows, test-python-lab2]
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Publish Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "latest"
-          name: "Релизы лабораторных работ (Windows)"
-          files: artifacts/**/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
