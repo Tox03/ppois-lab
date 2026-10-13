@@ -71,6 +71,12 @@ cmake --build build --config Release
 ./build/Release/ppois-lab1.exe -m markov examples/markov_example.txt -log
 ```
 
+#### Доступные примеры в `examples/`:
+* **`turing_example.txt`**: Двоичный инкремент ($+1$). Увеличивает двоичное число на 1 (`1011` $\to$ `1100`).
+* **`turing_unary_add.txt`**: Унарное сложение. Складывает два унарных числа (`111+11` $\to$ `11111`).
+* **`markov_example.txt`**: Удвоение унарного числа ($\times 2$). Переводит `|||a` $\to$ `||||||` ($3 \times 2 = 6$).
+* **`markov_sort.txt`**: Пузырьковая сортировка символов алфавита (`bbaababba` $\to$ `aaaabbbbb`).
+
 ---
 
 ## Запуск тестов
