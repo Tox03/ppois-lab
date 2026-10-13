@@ -1,4 +1,4 @@
-name: CI/CD Pipeline (All Labs)
+name: "Лабораторная работа №3: Социальная сеть"
 
 on:
   push:
@@ -10,58 +10,38 @@ permissions:
   contents: write
 
 jobs:
-  # ==========================================
-  # Лабораторная 1: Абстрактные машины (C++ на Windows)
-  # ==========================================
-  build-cpp-lab1-windows:
+  test-python-lab3:
+    name: "Тестирование, анализ покрытия и сборка ЛР №3"
     runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Tools (cppcheck, OpenCppCoverage)
-        run: |
-          choco install cppcheck opencppcoverage -y
-          echo "C:\Program Files\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\Program Files\Cppcheck" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
 
-      - name: Run Linter (cppcheck)
+      - name: Install dependencies
         run: |
-          & "C:\Program Files\Cppcheck\cppcheck.exe" --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab1/build/ lab1/
+          python -m pip install --upgrade pip
+          pip install coverage flake8 pyinstaller
 
-      - name: Configure and Build (MSVC Release)
+      - name: Lint with flake8
         run: |
-          cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Release
-          cmake --build lab1/build --config Release --parallel
+          flake8 --config=lab3/.flake8 lab3
 
-      - name: Run Unit Tests and Verify Coverage (>90%)
+      - name: Run Unit Tests and Verify Coverage (>=90%)
         run: |
-          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab1\src\turing" --sources "$((Get-Location).Path)\lab1\src\markov" --threshold 90 --export_type html:coverage_html -- .\lab1\build\Release\AllTests.exe
+          python -m coverage run --source=lab3/network,lab3/cli -m unittest discover -s lab3/tests -p "test_*.py" -v
+          python -m coverage report --fail-under=90
+
+      - name: Build Standalone Executable (.exe)
+        run: |
+          pyinstaller --name ppois-lab3 --onefile --paths . lab3/main.py --distpath lab3/dist
 
       - name: Upload Artifact (.exe)
         uses: actions/upload-artifact@v4
         with:
-          name: ppois_lab1_windows
-          path: lab1/build/Release/ppois-lab1.exe
-
-  # ==========================================
-  # Публикация релиза на GitHub Releases
-  # ==========================================
-  publish-release:
-    needs: [build-cpp-lab1-windows]
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Publish Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "latest"
-          name: "Релизы лабораторных работ (Windows)"
-          files: artifacts/**/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ppois_lab3_windows
+          path: lab3/dist/ppois-lab3.exe
