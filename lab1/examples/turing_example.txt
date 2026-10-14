@@ -1,4 +1,7 @@
 1011
-q0 1 q0 0 R
-q0 0 q0 1 R
-q0 _ q1 _ N
+q0 0 -> q0 0 R
+q0 1 -> q0 1 R
+q0 _ -> q1 _ L
+q1 1 -> q1 0 L
+q1 0 -> qstop 1 N
+q1 _ -> qstop 1 N
