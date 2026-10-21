@@ -70,6 +70,15 @@ class TestProductionSuite(unittest.TestCase):
         with self.assertRaises(DefectThresholdExceededException):
             line.record_scrap(total_produced=100, total_defective=5)
         self.assertEqual(line.record_scrap(0, 0), 0.0)
+        self.assertEqual(line.record_scrap(100, 2), 2.0)
+        line.stop_line()
+        self.assertFalse(line.is_running)
+        self.assertTrue(line.resume_line())
+        empty_line = ProductionLine("ЛИНИЯ-ПУСТАЯ", "Пустая")
+        self.assertFalse(empty_line.start_line())
+        inact_ws = WorkStation("ПОСТ-НЕАКТИВ", self.machine)
+        empty_line.add_station(inact_ws)
+        self.assertFalse(empty_line.start_line())
 
     def test_work_shift(self):
         s_emp = Employee("ТН-20", "Сергеев С.", "Мастер", 2800.0, self.ci)

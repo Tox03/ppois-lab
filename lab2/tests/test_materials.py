@@ -32,6 +32,10 @@ class TestMaterialsSuite(unittest.TestCase):
     def test_raw_material_calculations(self):
         mass = self.steel.estimate_mass_kg(1000.0)  # 1000 см³ * 7.85 г/см³ = 7850 г = 7.85 кг
         self.assertEqual(mass, 7.85)
+        with self.assertRaises(ValueError):
+            self.steel.estimate_mass_kg(-1.0)
+        with self.assertRaises(ValueError):
+            self.steel.calculate_volume_cost(-1.0)
         cost = self.steel.calculate_volume_cost(1000.0)
         self.assertEqual(cost, round(7.85 * 1.20, 2))
 
@@ -40,6 +44,8 @@ class TestMaterialsSuite(unittest.TestCase):
         mass = sheet.calculate_sheet_mass(2.0)
         self.assertGreater(mass, 0)
         self.assertTrue(sheet.check_formability())
+        with self.assertRaises(ValueError):
+            sheet.calculate_sheet_mass(-1.0)
         sheet.apply_galvanizing()
         self.assertTrue(sheet.is_galvanized)
 
@@ -48,6 +54,9 @@ class TestMaterialsSuite(unittest.TestCase):
         self.assertTrue(ingot.check_furnace_compatibility(750.0))
         self.assertFalse(ingot.check_furnace_compatibility(680.0))
         self.assertEqual(ingot.calculate_casting_yield(0.1), 13.5)
+        self.assertFalse(ingot.is_high_temp_alloy())
+        with self.assertRaises(ValueError):
+            ingot.calculate_casting_yield(1.5)
 
     def test_rubber_and_plastic(self):
         rubber = RubberCompound("РЕЗ-01", 65, 15.0)
@@ -111,6 +120,7 @@ class TestMaterialsSuite(unittest.TestCase):
         wh.add_bin(bin_box)
         found = wh.find_available_bin(500.0)
         self.assertIsNotNone(found)
+        self.assertIsNone(wh.find_available_bin(99999.0))
         self.assertEqual(wh.calculate_total_stored_weight(), 0.25)
 
     def test_material_supplier(self):

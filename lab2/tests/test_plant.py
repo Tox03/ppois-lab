@@ -54,6 +54,11 @@ class TestAutomotivePlantSuite(unittest.TestCase):
 
         self.plant.emergency_plant_shutdown("Учебная тревога")
         self.assertFalse(line.is_running)
+        restored = self.plant.restart_production_lines()
+        self.assertEqual(restored, 1)
+        self.assertTrue(line.is_running)
+        line.stop_line()
+        self.assertFalse(line.is_running)
 
 if __name__ == "__main__":
     unittest.main()

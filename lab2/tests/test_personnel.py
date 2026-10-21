@@ -52,6 +52,8 @@ class TestPersonnelSuite(unittest.TestCase):
         self.assertIn("БРАК", mark_bad)
         inspector.add_certification("IATF 16949")
         self.assertEqual(inspector.get_rejection_rate(1), 50.0)
+        insp_empty = QualityInspector(self.emp, "ОТК-00")
+        self.assertEqual(insp_empty.get_rejection_rate(0), 0.0)
 
     def test_maintenance_engineer_and_toolmaker(self):
         maint_emp = Employee("ТН-03", "Сидоров С.С.", "Инженер-механик", 2500.0, self.ci)
@@ -71,6 +73,8 @@ class TestPersonnelSuite(unittest.TestCase):
 
         fixture = ToolingFixture("ШТ-09", "Литье", 500, 1000)
         self.assertTrue(toolmaker.verify_die_precision(fixture))
+        toolmaker.refurbish_die(fixture)
+        self.assertEqual(toolmaker.refurbished_tools_count, 2)
 
     def test_safety_officer_and_supervisor(self):
         safe_emp = Employee("ТН-05", "Васильев В.В.", "Инженер по ОТ", 2400.0, self.ci)
@@ -88,6 +92,14 @@ class TestPersonnelSuite(unittest.TestCase):
         self.assertTrue(supervisor.active_shift_running)
         report = supervisor.end_shift(120)
         self.assertIn("120", report)
+        m_extra = Machine("СТК-99", "РЕЗЕРВ", 10.0, 25.0)
+        op_emp = Employee("ТН-01", "Иванов И.И.", "Оператор", 2000.0, self.ci)
+        op = MachineOperator(op_emp, 4, safety_certified=True)
+        self.assertEqual(op.produce_units(10), 0)
+        supervisor.reassign_operator(op, m_extra)
+        self.assertEqual(op.produce_units(0), 0)
+        self.assertEqual(op.produce_units(-5), 0)
+        self.assertEqual(op.produce_units(15), 15)
 
     def test_plant_director(self):
         dir_emp = Employee("ТН-00", "Федоров Ф.Ф.", "Генеральный директор", 6000.0, self.ci)

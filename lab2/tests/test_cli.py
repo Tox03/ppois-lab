@@ -248,6 +248,53 @@ class TestCliSuite(unittest.TestCase):
             result2 = cli._prompt("Введите значение", "дефолт2")
             self.assertEqual(result2, "дефолт2")
 
+    def test_cli_corrupted_json_handling(self):
+        """Проверяет корректную обработку поврежденного JSON-файла при загрузке."""
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="w", encoding="utf-8") as tmp:
+            tmp.write("{ invalid json file content }")
+            tmp_path = tmp.name
+
+        try:
+            cli = PlantCli()
+            cli.STATE_FILE_PATH = tmp_path
+            # Меню 13, операция 2 (Загрузить из JSON), затем 0 (Выход) без сохранения
+            commands = ["13", "2", "0", "нет"]
+            cli.run(auto_input=commands)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
+    def test_cli_boundary_menu_choices(self):
+        """Проверяет поведение при вводе некорректных команд в главном меню."""
+        cli = PlantCli()
+        commands = ["99", "-1", "abc", "", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_personnel_promotion_and_rank_change(self):
+        """Проверяет сценарии повышения сотрудника и изменения разряда."""
+        cli = PlantCli()
+        commands = ["9", "4", "2", "Старший оператор станков с ЧПУ", "20.0", "9", "5", "6", "0", "нет"]
+        cli.run(auto_input=commands)
+        self.assertEqual(cli.operator.qualification_rank, 6)
+
+    def test_cli_personnel_promotion_invalid_index(self):
+        """Проверяет сценарий ввода неверного номера сотрудника при повышении."""
+        cli = PlantCli()
+        commands = ["9", "4", "999", "9", "99", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_line_halt_and_resume_interactive(self):
+        """Проверяет останов и возобновление линий через меню управления линиями."""
+        cli = PlantCli()
+        commands = ["2", "1", "2", "2", "2", "3", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_warehouse_and_supplies(self):
+        """Проверяет сценарии работы с сырьем и складами предприятия."""
+        cli = PlantCli()
+        commands = ["6", "1", "6", "2", "100.0", "0", "нет"]
+        cli.run(auto_input=commands)
+
 
 if __name__ == "__main__":
     unittest.main()
