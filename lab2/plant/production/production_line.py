@@ -42,6 +42,20 @@ class ProductionLine:
         self.is_running = True
         return True
 
+    def stop_line(self) -> None:
+        """Планово останавливает работу производственной линии."""
+        self.is_running = False
+        for s in self.stations:
+            s.machine.stop()
+
+    def resume_line(self) -> bool:
+        """Возобновляет работу линии после останова или устранения аварии."""
+        for s in self.stations:
+            s.machine.service()
+            if s.operator is not None:
+                s.is_active = True
+        return self.start_line()
+
     def emergency_halt(self, reason: str, requires_evacuation: bool = False) -> None:
         """
         Производит аварийный останов всех станков линии.

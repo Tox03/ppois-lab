@@ -64,3 +64,4 @@ htmlcov/
 dist/
 build_pyinstaller/
 *.spec
+*plant_state.json

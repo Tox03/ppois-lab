@@ -505,7 +505,7 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 ### Запуск интерактивного консольного интерфейса (CLI):
 ```bash
-python lab2/main.py
+python lab2\main.py
 ```
 
 Интерактивное меню программы поддерживает управление полным жизненным циклом завода:

@@ -51,6 +51,14 @@ class AutomotivePlant:
         self.total_parts_produced += daily_units
         return daily_units
 
+    def restart_production_lines(self) -> int:
+        """Возобновляет работу всех производственных линий предприятия после останова."""
+        restored = 0
+        for line in self.production_lines:
+            if line.resume_line():
+                restored += 1
+        return restored
+
     def emergency_plant_shutdown(self, reason: str) -> None:
         """Производит экстренную остановку всех производственных линий предприятия при аварии."""
         for line in self.production_lines:
