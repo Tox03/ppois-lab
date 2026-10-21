@@ -197,7 +197,7 @@ class PlantCli:
     def action_daily_production(self) -> None:
         """Запуск производственного цикла линии с выбором количества смен."""
         print("\n--- [1] Запуск суточного производства ---")
-        shifts = self._prompt_int("Количество рабочих смен для запуска", 1, min_val=0, max_val=365)
+        shifts = self._prompt_int("Количество рабочих смен для запуска", 1)
         if shifts <= 0:
             print(f"Предупреждение: количество смен должно быть положительным числом (> 0, введено {shifts}).")
             print("Производственный цикл не запускался. Выпущено деталей: 0 шт.")
@@ -523,10 +523,10 @@ class PlantCli:
                 eng = MaintenanceEngineer(new_emp, certification_level="Высшая категория")
                 print(f"УСПЕХ: Новый инженер по ТО {name} принят на работу ({eng.certification_level})!")
             elif role_choice == "4":
-                _ = SafetyOfficer(new_emp, badge_number=f"ТБ-{len(self.employees)}")
+                _ = SafetyOfficer(new_emp, safety_policy_version=f"ISO-45001-rev{len(self.employees)}")
                 print(f"УСПЕХ: Инспектор по ТБ {name} принят на работу!")
             elif role_choice == "5":
-                _ = Toolmaker(new_emp, precision_tolerance_mm=0.005)
+                _ = Toolmaker(new_emp, specialty="Штампы и пресс-формы", precision_tolerance_mm=0.005)
                 print(f"УСПЕХ: Слесарь-инструментальщик {name} принят на работу!")
             else:
                 print(f"УСПЕХ: Сотрудник {name} добавлен в штатное расписание предприятия!")
