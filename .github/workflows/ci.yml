@@ -62,6 +62,9 @@ jobs:
   # Лабораторная 2: Завод автодеталей (Python на Windows)
   # ==========================================
   test-python-lab2:
+    env:
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: "utf-8"
     runs-on: windows-latest
     steps:
       - name: Checkout repository
