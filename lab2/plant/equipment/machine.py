@@ -55,3 +55,8 @@ class Machine:
         if self.current_temperature > self.max_allowed_temp:
             self.is_operational = False
             raise EquipmentOverheatException(self.machine_id, self.current_temperature, self.max_allowed_temp)
+
+    def service(self, target_temperature: float = 25.0) -> None:
+        """Проводит сервисное обслуживание станка, устраняет неисправности и охлаждает узел."""
+        self.is_operational = True
+        self.current_temperature = target_temperature
