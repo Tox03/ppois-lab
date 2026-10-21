@@ -36,6 +36,12 @@ class AutomotivePlant:
         """Вводит в строй новую производственную линию цеха."""
         self.production_lines.append(line)
 
+    def remove_production_line(self, line_id: str) -> bool:
+        """Выводит производственную линию из состава предприятия по её коду."""
+        initial_len = len(self.production_lines)
+        self.production_lines = [line for line in self.production_lines if line.line_id != line_id]
+        return len(self.production_lines) < initial_len
+
     def receive_production_order(self, order: ProductionOrder) -> None:
         """Принимает заказ в производственный портфель завода."""
         self.active_orders.append(order)

@@ -32,6 +32,12 @@ class ProductionLine:
         """Добавляет рабочий пост в цепочку конвейера."""
         self.stations.append(station)
 
+    def remove_station(self, station_id: str) -> bool:
+        """Удаляет рабочий пост из цепочки конвейера по его идентификатору."""
+        initial_len = len(self.stations)
+        self.stations = [s for s in self.stations if s.station_id != station_id]
+        return len(self.stations) < initial_len
+
     def start_line(self) -> bool:
         """Запускает линию, если все добавленные посты укомплектованы и активны."""
         if not self.stations:

@@ -58,6 +58,11 @@ class TestAutomotivePlantSuite(unittest.TestCase):
         self.assertEqual(restored, 1)
         self.assertTrue(line.is_running)
         line.stop_line()
+
+        # Тест удаления производственной линии
+        self.assertTrue(self.plant.remove_production_line("ЛИНИЯ-ШТАМП"))
+        self.assertEqual(len(self.plant.production_lines), 0)
+        self.assertFalse(self.plant.remove_production_line("НЕИЗВЕСТНАЯ-ЛИНИЯ"))
         self.assertFalse(line.is_running)
 
 if __name__ == "__main__":
