@@ -3,7 +3,19 @@
 from __future__ import annotations
 import json
 import os
+import sys
 from typing import Optional, List, Iterator, Dict, Any
+
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 from plant.automotive_plant import AutomotivePlant
 from plant.core.address import Address
