@@ -315,6 +315,8 @@ public:
     size_type degree(const T& v) const { return vertex_degree(v); }
     size_type inDegree(const T& v) const { return vertex_in_degree(v); }
     size_type outDegree(const T& v) const { return vertex_out_degree(v); }
+    size_type edgeDegree(const Edge<T>& e) const { return edge_degree(e); }
+    size_type edgeDegree(const T& from, const T& to) const { return edge_degree(from, to); }
 
     vertex_iterator verticesBegin() { return begin(); }
     vertex_iterator verticesEnd() { return end(); }

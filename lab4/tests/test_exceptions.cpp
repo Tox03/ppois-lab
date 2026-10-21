@@ -57,3 +57,27 @@ TEST(ExceptionTest, DegreesOfNonExistentVertexThrowsException) {
     EXPECT_THROW(graph.incidentEdgesBegin("Ghost"), GraphException);
     EXPECT_THROW(graph.adjacentVerticesBegin("Ghost"), GraphException);
 }
+
+TEST(ExceptionTest, EdgeDegreeOfNonExistentEdgeThrowsException) {
+    DirectedIncidenceMatrixGraph<std::string> graph;
+    graph.insertVertex("V1");
+    graph.insertVertex("V2");
+
+    EXPECT_THROW(graph.edge_degree("V1", "Ghost"), GraphException);
+    EXPECT_THROW(graph.edge_degree(Edge<std::string>("Ghost1", "Ghost2")), GraphException);
+}
+
+TEST(ExceptionTest, InvalidIteratorEraseThrowsException) {
+    DirectedIncidenceMatrixGraph<std::string> graph;
+    graph.insertVertex("A");
+
+    DirectedIncidenceMatrixGraph<std::string>::vertex_iterator default_v_it;
+    EXPECT_THROW(graph.erase(default_v_it), GraphException);
+
+    DirectedIncidenceMatrixGraph<std::string>::edge_iterator default_e_it;
+    EXPECT_THROW(graph.erase(default_e_it), GraphException);
+
+    DirectedIncidenceMatrixGraph<std::string> other_graph;
+    other_graph.insertVertex("Other");
+    EXPECT_THROW(graph.erase(other_graph.begin()), GraphException);
+}

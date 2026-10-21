@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <iostream>
+#include <utility>
 
 /**
  * @brief Класс, представляющий ориентированное ребро графа.
@@ -61,6 +62,12 @@ public:
      * @param id Новый идентификатор.
      */
     void setId(std::size_t id);
+
+    /**
+     * @brief Получить представление ребра в виде пары (источник, приёмник).
+     * @return std::pair<T, T> из начальной и конечной вершин.
+     */
+    std::pair<T, T> toPair() const;
 
     /**
      * @brief Проверить, является ли ребро петлёй (source == target).

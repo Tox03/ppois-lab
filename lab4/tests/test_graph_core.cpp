@@ -7,12 +7,15 @@
 TEST(DirectedGraphCoreTest, DefaultStateAndClear) {
     DirectedIncidenceMatrixGraph<std::string> graph;
     EXPECT_TRUE(graph.empty());
+    EXPECT_TRUE(graph.is_empty());
     EXPECT_EQ(graph.vertexCount(), 0u);
     EXPECT_EQ(graph.edgeCount(), 0u);
+    EXPECT_EQ(graph.size(), 0u);
 
     graph.insertVertex("V1");
     EXPECT_FALSE(graph.empty());
     EXPECT_EQ(graph.vertexCount(), 1u);
+    EXPECT_EQ(graph.size(), 1u);
 
     graph.clear();
     EXPECT_TRUE(graph.empty());
@@ -79,6 +82,12 @@ TEST(DirectedGraphCoreTest, EdgeOperationsAndLoops) {
     EXPECT_TRUE(graph.hasEdge("C", "C"));
     EXPECT_FALSE(graph.hasEdge("B", "A"));
 
+    // Проверка перегрузки has_edge с объектом Edge
+    Edge<std::string> edge_bc("B", "C");
+    EXPECT_TRUE(graph.has_edge(edge_bc));
+    Edge<std::string> edge_ba("B", "A");
+    EXPECT_FALSE(graph.has_edge(edge_ba));
+
     EXPECT_EQ(graph.edgeCount(), 3u);
 
     // Удаление вершины каскадно удаляет связанные рёбра
@@ -89,9 +98,86 @@ TEST(DirectedGraphCoreTest, EdgeOperationsAndLoops) {
     EXPECT_FALSE(graph.hasEdge("B", "C"));
     EXPECT_TRUE(graph.hasEdge("C", "C"));
 
-    // Удаление оставшегося ребра
-    graph.eraseEdge("C", "C");
+    // Удаление оставшегося ребра через объект Edge
+    Edge<std::string> loop_edge("C", "C");
+    EXPECT_TRUE(graph.remove_edge(loop_edge));
     EXPECT_EQ(graph.edgeCount(), 0u);
+}
+
+TEST(DirectedGraphCoreTest, ElementAccessAndIndexing) {
+    DirectedIncidenceMatrixGraph<std::string> graph;
+    graph.insertVertex("Alpha");
+    graph.insertVertex("Beta");
+
+    EXPECT_EQ(graph[0], "Alpha");
+    EXPECT_EQ(graph.at(1), "Beta");
+
+    // Модификация через неконстантную ссылку
+    graph[0] = "AlphaUpdated";
+    EXPECT_EQ(graph[0], "AlphaUpdated");
+
+    // Константный доступ
+    const auto& const_graph = graph;
+    EXPECT_EQ(const_graph[1], "Beta");
+    EXPECT_EQ(const_graph.at(0), "AlphaUpdated");
+
+    // Выход за границы диапазона
+    EXPECT_THROW(graph.at(99), GraphException);
+    EXPECT_THROW(const_graph.at(99), GraphException);
+}
+
+TEST(DirectedGraphCoreTest, FindVertexAndEdgeIterators) {
+    DirectedIncidenceMatrixGraph<std::string> graph;
+    graph.insertVertex("Node1");
+    graph.insertVertex("Node2");
+    graph.insertEdge("Node1", "Node2");
+
+    // Поиск вершины
+    auto v_it = graph.find_vertex("Node1");
+    ASSERT_NE(v_it, graph.end());
+    EXPECT_EQ(*v_it, "Node1");
+
+    auto v_ghost = graph.find_vertex("Ghost");
+    EXPECT_EQ(v_ghost, graph.end());
+
+    // Поиск ребра
+    auto e_it = graph.find_edge("Node1", "Node2");
+    ASSERT_NE(e_it, graph.edges_end());
+    EXPECT_EQ(e_it->getSource(), "Node1");
+    EXPECT_EQ(e_it->getTarget(), "Node2");
+
+    auto e_ghost = graph.find_edge("Node2", "Node1");
+    EXPECT_EQ(e_ghost, graph.edges_end());
+
+    // Константные версии поиска
+    const auto& const_graph = graph;
+    auto cv_it = const_graph.find_vertex("Node2");
+    ASSERT_NE(cv_it, const_graph.end());
+    EXPECT_EQ(*cv_it, "Node2");
+
+    auto ce_it = const_graph.find_edge("Node1", "Node2");
+    ASSERT_NE(ce_it, const_graph.edges_end());
+}
+
+TEST(DirectedGraphCoreTest, IteratorBasedRemoval) {
+    DirectedIncidenceMatrixGraph<std::string> graph;
+    graph.insertVertex("V1");
+    graph.insertVertex("V2");
+    graph.insertVertex("V3");
+    graph.insertEdge("V1", "V2");
+    graph.insertEdge("V2", "V3");
+
+    // Удаление ребра по итератору
+    auto edge_it = graph.edges_begin();
+    auto next_edge = graph.erase(edge_it);
+    EXPECT_EQ(graph.edgeCount(), 1u);
+    EXPECT_EQ(next_edge->getSource(), "V2");
+
+    // Удаление вершины по итератору
+    auto vertex_it = graph.begin();
+    auto next_vertex = graph.erase(vertex_it);
+    EXPECT_EQ(graph.vertexCount(), 2u);
+    EXPECT_EQ(*next_vertex, "V2");
 }
 
 TEST(DirectedGraphCoreTest, DegreesCalculations) {
@@ -120,6 +206,13 @@ TEST(DirectedGraphCoreTest, DegreesCalculations) {
     EXPECT_EQ(graph.outDegree('Y'), 0u);
     EXPECT_EQ(graph.inDegree('Y'), 1u);
     EXPECT_EQ(graph.degree('Y'), 1u);
+
+    // Вычисление степени ребра (число смежных рёбер)
+    // Ребро X -> Y инцидентно X (где также есть рёбра X->Z, Z->X, X->X) и Y (нет других рёбер)
+    // Всего смежных с (X -> Y) рёбер: 3
+    Edge<char> edge_xy('X', 'Y');
+    EXPECT_EQ(graph.edge_degree(edge_xy), 3u);
+    EXPECT_EQ(graph.edgeDegree('X', 'Y'), 3u);
 }
 
 TEST(DirectedGraphCoreTest, IncidenceMatrixValidation) {
@@ -155,6 +248,21 @@ TEST(DirectedGraphCoreTest, GraphWithCustomStudentClass) {
     std::ostringstream oss;
     oss << student_graph;
     EXPECT_FALSE(oss.str().empty());
+}
+
+TEST(DirectedGraphCoreTest, StreamOutputEmptyAndNonEmpty) {
+    DirectedIncidenceMatrixGraph<int> empty_graph;
+    std::ostringstream oss_empty;
+    oss_empty << empty_graph;
+    EXPECT_NE(oss_empty.str().find("нет рёбер"), std::string::npos);
+
+    DirectedIncidenceMatrixGraph<int> filled_graph;
+    filled_graph.insertVertex(1);
+    filled_graph.insertVertex(2);
+    filled_graph.insertEdge(1, 2);
+    std::ostringstream oss_filled;
+    oss_filled << filled_graph;
+    EXPECT_NE(oss_filled.str().find("1 -> 2"), std::string::npos);
 }
 
 TEST(DirectedGraphCoreTest, ComparisonOperators) {

@@ -35,6 +35,20 @@ TEST(EdgeTest, EqualityAndOrderingOperators) {
     EXPECT_FALSE(e1 != e2);
     EXPECT_TRUE(e1 != e3);
     EXPECT_TRUE(e1 < e3);
+    EXPECT_TRUE(e1 <= e2);
+    EXPECT_TRUE(e3 > e1);
+    EXPECT_TRUE(e3 >= e1);
+}
+
+TEST(EdgeTest, PairConversionAndLoopCheck) {
+    Edge<std::string> regular_edge("Alpha", "Beta", 10);
+    EXPECT_FALSE(regular_edge.isLoop());
+    auto pair_val = regular_edge.toPair();
+    EXPECT_EQ(pair_val.first, "Alpha");
+    EXPECT_EQ(pair_val.second, "Beta");
+
+    Edge<std::string> loop_edge("Gamma", "Gamma", 20);
+    EXPECT_TRUE(loop_edge.isLoop());
 }
 
 TEST(EdgeTest, StreamOutput) {

@@ -51,6 +51,12 @@ void Edge<T>::setId(std::size_t id) {
     id_ = id;
 }
 
+// Получение ребра в виде пары
+template <typename T>
+std::pair<T, T> Edge<T>::toPair() const {
+    return {source_, target_};
+}
+
 // Проверка на петлю
 template <typename T>
 bool Edge<T>::isLoop() const {
@@ -69,31 +75,28 @@ bool Edge<T>::operator!=(const Edge<T>& other) const {
     return !(*this == other);
 }
 
-// Оператор меньше
+// Оператор «меньше»
 template <typename T>
 bool Edge<T>::operator<(const Edge<T>& other) const {
-    if (source_ < other.source_) {
-        return true;
-    }
-    if (other.source_ < source_) {
-        return false;
+    if (source_ != other.source_) {
+        return source_ < other.source_;
     }
     return target_ < other.target_;
 }
 
-// Оператор меньше или равно
+// Оператор «меньше или равно»
 template <typename T>
 bool Edge<T>::operator<=(const Edge<T>& other) const {
-    return (*this < other) || (*this == other);
+    return !(other < *this);
 }
 
-// Оператор больше
+// Оператор «больше»
 template <typename T>
 bool Edge<T>::operator>(const Edge<T>& other) const {
     return other < *this;
 }
 
-// Оператор больше или равно
+// Оператор «больше или равно»
 template <typename T>
 bool Edge<T>::operator>=(const Edge<T>& other) const {
     return !(*this < other);
@@ -102,11 +105,7 @@ bool Edge<T>::operator>=(const Edge<T>& other) const {
 // Оператор вывода в поток
 template <typename U>
 std::ostream& operator<<(std::ostream& os, const Edge<U>& edge) {
-    os << "(" << edge.source_ << " -> " << edge.target_;
-    if (edge.isLoop()) {
-        os << " [петля]";
-    }
-    os << ")";
+    os << "(" << edge.source_ << " -> " << edge.target_ << ")";
     return os;
 }
 
