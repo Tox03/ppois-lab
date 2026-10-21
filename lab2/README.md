@@ -19,7 +19,7 @@
 | Address | 4 | 2 | — |
 | AlloyIngot | 5 | 3 | RawMaterial |
 | AutoPart | 6 | 3 | Dimension, QualityCheckFailedException, SerialNumber, TechnicalSpecification |
-| AutomotivePlant | 6 | 5 | MaterialWarehouse, PlantDirector, ProductionLine, ProductionOrder |
+| AutomotivePlant | 6 | 7 | MaterialWarehouse, PlantDirector, ProductionLine, ProductionOrder |
 | BrakeDisc | 5 | 3 | AutoPart |
 | CalibrationTool | 5 | 3 | CalibrationExpiredException |
 | ChemicalCoolant | 4 | 3 | — |
@@ -57,7 +57,7 @@
 | PaintingBooth | 5 | 3 | Machine, MachineMalfunctionException |
 | PlantDirector | 4 | 3 | Employee |
 | PlasticPellet | 4 | 3 | MaterialDefectException |
-| ProductionLine | 6 | 4 | DefectThresholdExceededException, ProductionLineHaltException, WorkStation |
+| ProductionLine | 6 | 7 | DefectThresholdExceededException, ProductionLineHaltException, WorkStation |
 | ProductionOrder | 5 | 3 | OrderCapacityExceededException, ProductionPlan |
 | ProductionPlan | 4 | 3 | — |
 | QualityInspector | 4 | 3 | Employee |
@@ -105,7 +105,7 @@
 | Доменные классы | 63 | — |
 | Исключения | 14 | не менее 12 |
 | Поля (суммарно) | 328 | не менее 150 |
-| Поведения (методы) | 204 | не менее 100 |
+| Поведения (методы) | 210 | не менее 100 |
 | Ассоциации | 103 | не менее 30 |
 | Файлов с >1 классом | 0 | 0 (запрещено) |
 
@@ -333,7 +333,7 @@
 #### Класс `ProductionLine`
 *Управляет последовательностью рабочих постов цеха и мониторит качество.*
 - **Поля (6)**: `is_running`, `line_id`, `line_name`, `max_allowed_scrap_pct`, `scrap_rate`, `stations`
-- **Методы (4)**: `add_station()`, `start_line()`, `emergency_halt()`, `record_scrap()`
+- **Методы (7)**: `add_station()`, `remove_station()`, `start_line()`, `stop_line()`, `resume_line()`, `emergency_halt()`, `record_scrap()`
 - **Ассоциации**: `DefectThresholdExceededException`, `ProductionLineHaltException`, `WorkStation`
 
 #### Класс `WorkShift`
@@ -492,7 +492,7 @@
 #### Класс `AutomotivePlant`
 *Центральный управляющий класс производственного комплекса автокомпонентов.*
 - **Поля (6)**: `active_orders`, `director`, `plant_name`, `production_lines`, `total_parts_produced`, `warehouses`
-- **Методы (5)**: `register_warehouse()`, `add_production_line()`, `receive_production_order()`, `execute_daily_production()`, `emergency_plant_shutdown()`
+- **Методы (7)**: `register_warehouse()`, `add_production_line()`, `remove_production_line()`, `receive_production_order()`, `execute_daily_production()`, `restart_production_lines()`, `emergency_plant_shutdown()`
 - **Ассоциации**: `MaterialWarehouse`, `PlantDirector`, `ProductionLine`, `ProductionOrder`
 
 ## Запуск тестов и валидатора метрик
