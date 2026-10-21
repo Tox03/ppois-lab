@@ -1,4 +1,4 @@
-name: "Лабораторная работа №3: Социальная сеть"
+name: "Continuous Integration Pipeline"
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   test-python-lab3:
-    name: "Тестирование, анализ покрытия и сборка ЛР №3"
+    name: "ЛР №3: Тестирование, анализ покрытия и сборка"
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -45,3 +45,46 @@ jobs:
         with:
           name: ppois_lab3_windows
           path: lab3/dist/ppois-lab3.exe
+
+  build-and-test-cpp-lab4:
+    name: "ЛР №4: Сборка, тестирование (GoogleTest), покрытие и артефакт"
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install OpenCppCoverage
+        run: |
+          choco install opencppcoverage -y
+
+      - name: Configure CMake
+        run: |
+          cmake -S lab4 -B lab4/build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build C++ Targets with CMake
+        run: |
+          cmake --build lab4/build --config Release --parallel
+
+      - name: Run Unit Tests (GoogleTest)
+        run: |
+          .\lab4\build\Release\AllTests.exe
+
+      - name: Run Non-Interactive Demo
+        run: |
+          .\lab4\build\Release\ppois-lab4.exe --demo
+
+      - name: Generate Code Coverage Report (OpenCppCoverage)
+        run: |
+          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab4" --export_type html:lab4_coverage_report -- .\lab4\build\Release\AllTests.exe
+
+      - name: Upload Code Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab4_coverage_report
+          path: lab4_coverage_report/
+
+      - name: Upload Executable (.exe)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppois_lab4_windows
+          path: lab4/build/Release/ppois-lab4.exe

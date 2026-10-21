@@ -65,3 +65,7 @@ htmlcov/
 dist/
 build_pyinstaller/
 *.spec
+
+# Файлы описания заданий и чеклистов
+/checklist.md
+/lab*.md
