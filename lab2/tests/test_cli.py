@@ -10,6 +10,9 @@ import unittest.mock as mock
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from cli.plant_cli import PlantCli
+from plant.production.production_line import ProductionLine
+from plant.production.production_plan import ProductionPlan
+from plant.production.production_order import ProductionOrder
 
 
 class TestCliSuite(unittest.TestCase):
@@ -293,6 +296,88 @@ class TestCliSuite(unittest.TestCase):
         """Проверяет сценарии работы с сырьем и складами предприятия."""
         cli = PlantCli()
         commands = ["6", "1", "6", "2", "100.0", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_prompt_validations_and_generator_exhaustion(self):
+        """Проверяет валидацию ввода чисел (границы, ошибки типа) и исчерпание генератора."""
+        cli = PlantCli()
+        cli._input_gen = iter(["val1"])
+        self.assertEqual(cli._prompt("msg", "def"), "val1")
+        self.assertEqual(cli._prompt("msg", "def"), "def")
+
+        cli._input_gen = iter(["-5", "105", "not_int", "42"])
+        self.assertEqual(cli._prompt_int("m", 10, min_val=0), 10)
+        self.assertEqual(cli._prompt_int("m", 10, max_val=100), 10)
+        self.assertEqual(cli._prompt_int("m", 10), 10)
+        self.assertEqual(cli._prompt_int("m", 10), 42)
+
+        cli._input_gen = iter(["-1.5", "150.0", "bad_flt", "3.14"])
+        self.assertEqual(cli._prompt_float("m", 5.0, min_val=0.0), 5.0)
+        self.assertEqual(cli._prompt_float("m", 5.0, max_val=100.0), 5.0)
+        self.assertEqual(cli._prompt_float("m", 5.0), 5.0)
+        self.assertEqual(cli._prompt_float("m", 5.0), 3.14)
+
+    def test_cli_daily_production_with_halted_lines(self):
+        """Проверяет запуск смены при остановленной линии."""
+        cli = PlantCli()
+        cli.prod_line.is_running = False
+        cli.work_station.is_active = False
+        commands = ["1", "1", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_manage_lines_extended_edge_cases(self):
+        """Проверяет обработку ошибок управления линиями (нечисловой ввод, неактивные посты)."""
+        cli = PlantCli()
+        empty_line = ProductionLine("ЛИНИЯ-ТЕСТ", "Тестовая пустая линия")
+        cli.plant.add_production_line(empty_line)
+        commands = ["2", "1", "2", "abc", "2", "2", "2", "1", "abc", "2", "1", "2", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_order_creation_edge_cases(self):
+        """Проверяет создание наряда с 0 деталей и наряда с ошибкой."""
+        cli = PlantCli()
+        commands = ["3", "НАРЯД-000", "Деталь", "0", "3", "НАРЯД-999", "Сверхзаказ", "90000", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_order_completion_not_in_production(self):
+        """Проверяет сдачу наряда, статус которого еще не переведен в производство."""
+        cli = PlantCli()
+        plan = ProductionPlan("ПЛАН-NEW", planned_quantity=100, deadline_date="2026-10-30")
+        new_order = ProductionOrder("НАРЯД-NEW", "Шестерня", 100, plan)
+        new_order.status = "СОЗДАН"
+        cli.plant.receive_production_order(new_order)
+        commands = ["4", str(len(cli.plant.active_orders)), "0", "нет"]
+        cli.run(auto_input=commands)
+        self.assertEqual(new_order.status, "ВЫПОЛНЕН")
+
+    def test_cli_warehouse_edge_cases(self):
+        """Проверяет граничные условия склада (нулевая масса, переполнение ячейки)."""
+        cli = PlantCli()
+        commands = ["5", "1", "0", "5", "1", "999999.0", "5", "2", "0", "5", "2", "999999.0", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_commercial_dispatch_zero_and_errors(self):
+        """Проверяет нулевой объем, нулевую цену и ошибку отгрузки."""
+        cli = PlantCli()
+        commands = [
+            "6", "КЛ-01", "Деталь", "0",
+            "6", "КЛ-02", "Деталь", "100", "0.0",
+            "6", "КЛ-03", "Деталь", "999999", "10.0",
+            "0", "нет"
+        ]
+        cli.run(auto_input=commands)
+
+    def test_cli_equipment_and_budget_zero_and_errors(self):
+        """Проверяет ошибку оборотов ЧПУ и пополнение бюджета на 0 у.е."""
+        cli = PlantCli()
+        commands = ["8", "1", "-100", "9", "1", "0.0", "0", "нет"]
+        cli.run(auto_input=commands)
+
+    def test_cli_json_save_load_failures(self):
+        """Проверяет обработку ошибок сохранения и загрузки JSON."""
+        cli = PlantCli()
+        cli.STATE_FILE_PATH = "Z:\\non_existent_drive_12345\\state.json"
+        commands = ["13", "1", "13", "2", "0", "нет"]
         cli.run(auto_input=commands)
 
 
