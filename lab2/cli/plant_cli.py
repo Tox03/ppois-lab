@@ -284,7 +284,7 @@ class PlantCli:
         default_id = f"НАРЯД-{order_num:03d}"
         order_id = self._prompt("Номер наряда-заказа", default_id)
         part_name = self._prompt("Наименование автодетали", "Поршень ДВС 2112")
-        qty = self._prompt_int("Количество деталей в партии (шт.)", 500, min_val=1, max_val=100000)
+        qty = self._prompt_int("Количество деталей в партии (шт.)", 500, max_val=100000)
         if qty <= 0:
             print("Ошибка: объем партии деталей должен быть больше нуля. Наряд не создан.")
             return
@@ -341,7 +341,7 @@ class PlantCli:
         op_choice = self._prompt("Выберите операцию", "1")
 
         if op_choice == "1":
-            qty = self._prompt_float("Масса сырья для пополнения (кг)", 250.0, min_val=0.1)
+            qty = self._prompt_float("Масса сырья для пополнения (кг)", 250.0)
             if qty <= 0:
                 print("Ошибка: масса пополнения должна быть больше нуля.")
                 return
@@ -353,7 +353,7 @@ class PlantCli:
             except Exception as err:
                 print(f"Ошибка при пополнении склада: {err}")
         elif op_choice == "2":
-            qty = self._prompt_float("Масса сырья для списания (кг)", 120.0, min_val=0.1)
+            qty = self._prompt_float("Масса сырья для списания (кг)", 120.0)
             if qty <= 0:
                 print("Ошибка: масса списания должна быть больше нуля.")
                 return
@@ -378,11 +378,11 @@ class PlantCli:
         print("\n--- [6] Оформление коммерческого заказа и отгрузка (ТТН) ---")
         client_order_id = self._prompt("Номер контракта / заказа", f"ДОГОВОР-{len(self.active_dispatches) + 1:03d}")
         part_name = self._prompt("Наименование автодетали для поставки", "Поршень ДВС в сборе")
-        qty = self._prompt_int("Объем поставки (шт.)", 400, min_val=1)
+        qty = self._prompt_int("Объем поставки (шт.)", 400)
         if qty <= 0:
             print("Ошибка: объем поставки должен быть больше нуля.")
             return
-        unit_price = self._prompt_float("Цена за единицу (у.е.)", 45.0, min_val=0.01)
+        unit_price = self._prompt_float("Цена за единицу (у.е.)", 45.0)
         if unit_price <= 0:
             print("Ошибка: цена за единицу должна быть положительной.")
             return
@@ -483,7 +483,7 @@ class PlantCli:
         sub_choice = self._prompt("Выберите операцию", "1")
 
         if sub_choice == "1":
-            add_budget = self._prompt_float("Сумма пополнения бюджета (у.е.)", 500000.0, min_val=0.01)
+            add_budget = self._prompt_float("Сумма пополнения бюджета (у.е.)", 500000.0)
             if add_budget <= 0:
                 print("Ошибка: сумма пополнения должна быть больше нуля.")
                 return
