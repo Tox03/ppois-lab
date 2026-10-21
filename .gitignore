@@ -1,5 +1,5 @@
 # ============================================
-# C++ and Visual Studio / CMake .gitignore
+# C++ / Visual Studio / CMake .gitignore
 # ============================================
 
 # Каталоги сборки (CMake / Visual Studio / Ninja)
@@ -37,7 +37,7 @@ _deps/
 *.a
 *.lib
 
-# Кэш CMake (если запуск был напрямую в корне проекта)
+# Кэш CMake
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
@@ -46,10 +46,77 @@ Makefile
 !CMakeLists.txt
 !cmake/**
 
-# Временные файлы редакторов и ОС
-.vscode/
+# ============================================
+# Python .gitignore
+# ============================================
+
+# Байткод и кэши
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Виртуальные окружения
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Дистрибутивы, пакеты и сборка PyInstaller
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# Тестирование и отчеты о покрытии (Coverage / Pytest)
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+coverage_html/
+
+# Временные файлы состояния и симуляции завода
+plant_state.json
+**/plant_state.json
+**/data/plant_state.json
+**/data/*.tmp
+
+# ============================================
+# IDE, редакторы кода и операционная система
+# ============================================
+
 .idea/
+**/.idea/
+.vscode/
+**/.vscode/
+*.swp
+*.swo
+*~
+
 Thumbs.db
 .DS_Store
+desktop.ini
 *.tmp
 *.log
