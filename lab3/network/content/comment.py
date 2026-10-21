@@ -44,3 +44,7 @@ class Comment:
     def belongs_to_post(self, post: Post) -> bool:
         """Проверяет принадлежность комментария к конкретной записи."""
         return self.post_id == post.post_id
+
+    def unhide(self) -> None:
+        """Делает скрытый комментарий снова видимым."""
+        self.is_hidden = False

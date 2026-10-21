@@ -44,3 +44,7 @@ class Subscription:
     def belongs_to_subscriber(self, user: UserAccount) -> bool:
         """Проверяет принадлежность подписки пользователю."""
         return self.user_id == user.user_id
+
+    def enable_auto_renew(self) -> None:
+        """Включает автоматическое списание за продление."""
+        self.auto_renew = True

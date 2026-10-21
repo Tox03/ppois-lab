@@ -41,3 +41,7 @@ class UserProfile:
         verified_mark = " [✓]" if self.is_verified else ""
         location = contact.format_location()
         return f"Профиль{verified_mark}: {self.bio} | Локация: {location}"
+
+    def unverify_profile(self) -> None:
+        """Снимает галочку верификации профиля."""
+        self.is_verified = False

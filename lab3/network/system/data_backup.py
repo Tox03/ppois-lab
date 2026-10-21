@@ -35,3 +35,8 @@ class DataBackup:
     def mark_corrupted(self) -> None:
         """Помечает резервную копию как поврежденную."""
         self.status = "corrupted"
+
+    def restore_snapshot(self) -> str:
+        """Восстанавливает статус резервной копии как готовой к использованию."""
+        self.status = "restored"
+        return self.status

@@ -38,6 +38,9 @@ class TestContent(unittest.TestCase):
             post.edit_content("Хакер", self.other_user)
         post.soft_delete()
         self.assertTrue(post.is_deleted)
+        post.restore()
+        self.assertFalse(post.is_deleted)
+        post.soft_delete()
         with self.assertRaises(ContentBlockedException):
             post.edit_content("Нельзя редактировать", self.user)
 
@@ -77,6 +80,10 @@ class TestContent(unittest.TestCase):
         self.assertAlmostEqual(opt1.percentage, 66.7, delta=0.5)
         self.assertAlmostEqual(opt2.percentage, 33.3, delta=0.5)
         poll.close_poll()
+        self.assertTrue(poll.is_closed)
+        poll.reopen_poll()
+        self.assertFalse(poll.is_closed)
+        poll.close_poll()
         with self.assertRaises(InvalidContentException):
             poll.add_vote(opt1)
 
@@ -94,6 +101,8 @@ class TestContent(unittest.TestCase):
         self.assertEqual(comment.text, "Исправленный комментарий")
         comment.hide()
         self.assertTrue(comment.is_hidden)
+        comment.unhide()
+        self.assertFalse(comment.is_hidden)
 
     def test_album_and_stories(self):
         album = Album("alb_1", "usr_1", "Отпуск")

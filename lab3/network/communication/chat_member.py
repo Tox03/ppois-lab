@@ -37,3 +37,8 @@ class ChatMember:
         """Блокирует участника в данном чате."""
         self.is_banned = True
         self.role = "banned"
+
+    def unban(self) -> None:
+        """Снимает блокировку с участника чата."""
+        self.is_banned = False
+        self.role = "member"

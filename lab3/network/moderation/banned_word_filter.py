@@ -43,3 +43,11 @@ class BannedWordFilter:
             raise InvalidContentException("Слово не может быть пустым")
         self.banned_words_count += 1
         return self.banned_words_count
+
+    def remove_keyword(self, word: str) -> int:
+        """Удаляет термин из стоп-словаря."""
+        if not word.strip():
+            raise InvalidContentException("Слово не может быть пустым")
+        if self.banned_words_count > 0:
+            self.banned_words_count -= 1
+        return self.banned_words_count

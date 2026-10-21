@@ -44,3 +44,7 @@ class GroupChat:
     def mute(self) -> None:
         """Отключает звуковые уведомления о сообщениях группы."""
         self.is_muted = True
+
+    def unmute(self) -> None:
+        """Включает звуковые уведомления о сообщениях группы."""
+        self.is_muted = False

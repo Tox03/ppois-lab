@@ -34,3 +34,8 @@ class BlockRecord:
     def format_block_notice(self) -> str:
         """Формирует уведомление о причине внесения в черный список."""
         return f"Пользователь {self.blocked_id} заблокирован по причине: {self.reason}"
+
+    def activate(self, blocker: UserAccount) -> None:
+        """Повторно активирует блокировку инициатором."""
+        if blocker.user_id == self.blocker_id:
+            self.is_active = True

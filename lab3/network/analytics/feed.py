@@ -37,3 +37,9 @@ class Feed:
     def clear_feed(self) -> None:
         """Очищает кэшированные публикации в ленте."""
         self.items_count = 0
+
+    def remove_item(self) -> int:
+        """Удаляет элемент из ленты."""
+        if self.items_count > 0:
+            self.items_count -= 1
+        return self.items_count

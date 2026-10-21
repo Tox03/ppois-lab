@@ -48,3 +48,7 @@ class UserGroup:
     def has_member(self, membership: GroupMembership) -> bool:
         """Проверяет принадлежность членства к данной группе."""
         return self.group_id == membership.group_id
+
+    def unverify_group(self) -> None:
+        """Снимает отметку официальной верификации сообщества."""
+        self.is_verified = False

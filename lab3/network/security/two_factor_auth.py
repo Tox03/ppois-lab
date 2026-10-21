@@ -42,3 +42,8 @@ class TwoFactorAuth:
             raise AuthenticationException("Все резервные коды исчерпаны")
         self.backup_codes_left -= 1
         return self.backup_codes_left
+
+    def disable_2fa(self, user: UserAccount) -> None:
+        """Деактивирует двухфакторную защиту для учетной записи."""
+        if user.user_id == self.user_id:
+            self.is_enabled = False

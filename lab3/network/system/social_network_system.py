@@ -55,3 +55,16 @@ class SocialNetworkSystem:
         """Формирует системную сводку о состоянии социальной сети."""
         status = "Техобслуживание" if self.is_maintenance_mode else "Штатный"
         return f"Сеть '{self.network_name}' v{self.version}: {self.users_count} польз., {self.posts_count} постов. Режим: {status}"
+
+    def remove_user(self, user: UserAccount) -> int:
+        """Исключает пользователя из системы."""
+        if self.users_count > 0:
+            self.users_count -= 1
+        return self.users_count
+
+    def delete_post(self, post: Post) -> int:
+        """Удаляет публикацию из глобального реестра."""
+        post.soft_delete()
+        if self.posts_count > 0:
+            self.posts_count -= 1
+        return self.posts_count
