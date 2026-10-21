@@ -32,6 +32,8 @@ jobs:
           flake8 --config=lab3/.flake8 lab3
 
       - name: Run Unit Tests and Verify Coverage (>=90%)
+        env:
+          PYTHONPATH: .
         run: |
           python -m coverage run --source=lab3/network,lab3/cli -m unittest discover -s lab3/tests -p "test_*.py" -v
           python -m coverage report --fail-under=90
