@@ -233,25 +233,28 @@ class PlantCli:
         print(f"Всего произведено предприятием: {self.plant.total_parts_produced} шт.")
 
     def action_manage_production_lines(self) -> None:
-        """Управление линиями цеха: просмотр статуса, пуск, плановый останов и перезапуск после аварии."""
+        """Управление линиями цеха: пуск, останов, создание/удаление линий и технологических постов."""
         print("\n--- [2] Управление производственными линиями ---")
-        if not self.plant.production_lines:
+        if self.plant.production_lines:
+            print("Действующие линии завода:")
+            for idx, line in enumerate(self.plant.production_lines, start=1):
+                status = "РАБОТАЕТ (ЗАПУЩЕНА)" if line.is_running else "ОСТАНОВЛЕНА / ТРЕБУЕТСЯ ПУСК"
+                print(f"  [{idx}] {line.line_id} | '{line.line_name}' | Постов: {len(line.stations)} | Статус: {status}")
+                for st_idx, st in enumerate(line.stations, start=1):
+                    op_name = st.operator.employee.full_name if st.operator else "НЕТ ОПЕРАТОРА"
+                    m_stat = f"{st.machine.current_temperature:.1f}°C, исправен: {st.machine.is_operational}"
+                    print(f"       Пост {st_idx} ({st.station_id}): Станок {st.machine.machine_id} [{m_stat}] | Оператор: {op_name}")
+        else:
             print("На предприятии нет зарегистрированных производственных линий.")
-            return
 
-        print("Действующие линии завода:")
-        for idx, line in enumerate(self.plant.production_lines, start=1):
-            status = "РАБОТАЕТ (ЗАПУЩЕНА)" if line.is_running else "ОСТАНОВЛЕНА / ТРЕБУЕТСЯ ПУСК"
-            print(f"  [{idx}] {line.line_id} | '{line.line_name}' | Постов: {len(line.stations)} | Статус: {status}")
-            for st_idx, st in enumerate(line.stations, start=1):
-                op_name = st.operator.employee.full_name if st.operator else "НЕТ ОПЕРАТОРА"
-                m_stat = f"{st.machine.current_temperature:.1f}°C, исправен: {st.machine.is_operational}"
-                print(f"       Пост {st_idx} ({st.station_id}): Станок {st.machine.machine_id} [{m_stat}] | Оператор: {op_name}")
-
-        print("\nОперации: 1 - Перезапустить / возобновить работу линии (сброс аварий), 2 - Плановый останов линии, 3 - Добавить пост")
+        print("\nОперации: 1 - Перезапустить / возобновить работу линии (сброс аварий), 2 - Плановый останов линии, "
+              "3 - Добавить новую линию, 4 - Удалить линию, 5 - Добавить технологический пост, 6 - Удалить пост с линии")
         choice = self._prompt("Выберите операцию", "1")
 
         if choice == "1":
+            if not self.plant.production_lines:
+                print("Нет доступных линий для запуска.")
+                return
             choice_idx_str = self._prompt("Номер линии для запуска / перезапуска", "1")
             try:
                 line_idx = int(choice_idx_str) - 1
@@ -268,6 +271,9 @@ class PlantCli:
             except Exception as err:
                 print(f"Ошибка при перезапуске линии: {err}")
         elif choice == "2":
+            if not self.plant.production_lines:
+                print("Нет доступных линий для останова.")
+                return
             choice_idx_str = self._prompt("Номер линии для останова", "1")
             try:
                 line_idx = int(choice_idx_str) - 1
@@ -280,12 +286,79 @@ class PlantCli:
             except Exception as err:
                 print(f"Ошибка при останове линии: {err}")
         elif choice == "3":
-            new_st_id = f"СТ-{len(self.prod_line.stations) + 1:02d}"
-            new_machine = Machine(f"СТАНОК-{new_st_id}", "HAAS-ST20", operating_hours=0.0, current_temperature=22.0)
-            new_ws = WorkStation(new_st_id, new_machine)
-            new_ws.assign_operator(self.operator)
-            self.prod_line.add_station(new_ws)
-            print(f"УСПЕХ: На линию '{self.prod_line.line_name}' добавлен технологический пост {new_st_id} ({new_machine.model}).")
+            default_id = f"ЛИНИЯ-{len(self.plant.production_lines) + 1:02d}"
+            line_id = self._prompt("Идентификатор новой линии", default_id)
+            line_name = self._prompt("Название производственной линии", "Линия обработки коленчатых валов")
+            max_scrap = self._prompt_float("Предельно допустимый процент брака (%)", 3.0, min_val=0.1, max_val=50.0)
+            new_line = ProductionLine(line_id, line_name, max_allowed_scrap_pct=max_scrap)
+            self.plant.add_production_line(new_line)
+            print(f"УСПЕХ: Производственная линия '{new_line.line_name}' [{new_line.line_id}] зарегистрирована!")
+        elif choice == "4":
+            if not self.plant.production_lines:
+                print("Нет доступных линий для удаления.")
+                return
+            choice_idx_str = self._prompt("Номер линии для удаления", "1")
+            try:
+                line_idx = int(choice_idx_str) - 1
+                if 0 <= line_idx < len(self.plant.production_lines):
+                    target_line = self.plant.production_lines[line_idx]
+                    target_line.stop_line()
+                    self.plant.remove_production_line(target_line.line_id)
+                    print(f"УСПЕХ: Линия '{target_line.line_name}' [{target_line.line_id}] удалена из состава завода.")
+                else:
+                    print("Указан некорректный номер линии.")
+            except Exception as err:
+                print(f"Ошибка при удалении линии: {err}")
+        elif choice == "5":
+            if not self.plant.production_lines:
+                print("Сначала создайте хотя бы одну производственную линию (операция 3).")
+                return
+            line_choice_str = self._prompt("Номер линии для добавления поста", "1")
+            try:
+                line_idx = int(line_choice_str) - 1
+                if not (0 <= line_idx < len(self.plant.production_lines)):
+                    print("Указан некорректный номер линии.")
+                    return
+                target_line = self.plant.production_lines[line_idx]
+                default_st_id = f"СТ-{len(target_line.stations) + 1:02d}"
+                st_id = self._prompt("Идентификатор / название поста", default_st_id)
+                m_model = self._prompt("Модель / тип станка", "HAAS-ST20")
+                m_id = self._prompt("Идентификатор станка", f"СТАНОК-{st_id}")
+                new_machine = Machine(m_id, m_model, operating_hours=0.0, current_temperature=22.0)
+                new_ws = WorkStation(st_id, new_machine)
+                new_ws.assign_operator(self.operator)
+                target_line.add_station(new_ws)
+                print(f"УСПЕХ: На линию '{target_line.line_name}' добавлен технологический пост '{st_id}' "
+                      f"(Станок: {m_model}, оператор: {self.operator.employee.full_name}).")
+            except Exception as err:
+                print(f"Ошибка при добавлении поста: {err}")
+        elif choice == "6":
+            if not self.plant.production_lines:
+                print("Нет производственных линий.")
+                return
+            line_choice_str = self._prompt("Номер линии для удаления поста", "1")
+            try:
+                line_idx = int(line_choice_str) - 1
+                if not (0 <= line_idx < len(self.plant.production_lines)):
+                    print("Указан некорректный номер линии.")
+                    return
+                target_line = self.plant.production_lines[line_idx]
+                if not target_line.stations:
+                    print(f"На линии '{target_line.line_name}' нет технологических постов.")
+                    return
+                print(f"Технологические посты линии '{target_line.line_name}':")
+                for s_idx, st in enumerate(target_line.stations, start=1):
+                    print(f"  [{s_idx}] Пост '{st.station_id}' | Станок: {st.machine.machine_id} ({st.machine.model})")
+                st_idx_str = self._prompt("Номер поста для демонтажа / удаления", "1")
+                s_idx = int(st_idx_str) - 1
+                if 0 <= s_idx < len(target_line.stations):
+                    removed_st = target_line.stations[s_idx]
+                    target_line.remove_station(removed_st.station_id)
+                    print(f"УСПЕХ: Пост '{removed_st.station_id}' успешно демонтирован с линии '{target_line.line_name}'.")
+                else:
+                    print("Указан некорректный номер поста.")
+            except Exception as err:
+                print(f"Ошибка при удалении поста: {err}")
         else:
             print("Неизвестная операция управления линиями.")
 
@@ -688,6 +761,14 @@ class PlantCli:
                         "line_name": line.line_name,
                         "is_running": line.is_running,
                         "scrap_rate": line.scrap_rate,
+                        "stations": [
+                            {
+                                "station_id": st.station_id,
+                                "machine_id": st.machine.machine_id,
+                                "model": st.machine.model,
+                            }
+                            for st in line.stations
+                        ],
                     }
                     for line in self.plant.production_lines
                 ],
@@ -769,13 +850,27 @@ class PlantCli:
             if cutter_data:
                 self.cutter.flank_wear_mm = float(cutter_data.get("flank_wear_mm", self.cutter.flank_wear_mm))
 
-            # Восстановление линий
+            # Восстановление линий и постов
             lines_data = data.get("production_lines", [])
             for ld in lines_data:
+                target_l = None
                 for line in self.plant.production_lines:
                     if line.line_id == ld.get("line_id"):
-                        line.is_running = bool(ld.get("is_running", False))
-                        line.scrap_rate = float(ld.get("scrap_rate", 0.0))
+                        target_l = line
+                        break
+                if target_l is None:
+                    target_l = ProductionLine(ld["line_id"], ld.get("line_name", ld["line_id"]))
+                    self.plant.add_production_line(target_l)
+                target_l.is_running = bool(ld.get("is_running", False))
+                target_l.scrap_rate = float(ld.get("scrap_rate", 0.0))
+
+                for sd in ld.get("stations", []):
+                    st_id = sd.get("station_id")
+                    if st_id and not any(s.station_id == st_id for s in target_l.stations):
+                        mach = Machine(sd.get("machine_id", f"СТАНОК-{st_id}"), sd.get("model", "HAAS-ST20"))
+                        ws = WorkStation(st_id, mach)
+                        ws.assign_operator(self.operator)
+                        target_l.add_station(ws)
 
             # Восстановление нарядов
             orders_data = data.get("active_orders", [])

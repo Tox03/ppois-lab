@@ -80,6 +80,10 @@ class TestProductionSuite(unittest.TestCase):
         empty_line.add_station(inact_ws)
         self.assertFalse(empty_line.start_line())
 
+        self.assertTrue(line.remove_station("ПОСТ-01"))
+        self.assertEqual(len(line.stations), 0)
+        self.assertFalse(line.remove_station("ПОСТ-НЕСУЩ"))
+
     def test_work_shift(self):
         s_emp = Employee("ТН-20", "Сергеев С.", "Мастер", 2800.0, self.ci)
         supervisor = ShiftSupervisor(s_emp, "СМЕНА-ДЕНЬ", 10)
