@@ -13,6 +13,10 @@ jobs:
   test-python-lab3:
     name: "ЛР №3: Тестирование, анализ покрытия и сборка"
     runs-on: windows-latest
+    env:
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: "utf-8"
+      PYTHONPATH: .
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
