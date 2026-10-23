@@ -1,5 +1,5 @@
 # ============================================
-# C++ and Visual Studio / CMake .gitignore
+# C++ / Visual Studio / CMake .gitignore
 # ============================================
 
 # Каталоги сборки (CMake / Visual Studio / Ninja)
@@ -9,6 +9,10 @@ out/
 bin/
 lib/
 _deps/
+x64/
+x86/
+ARM64/
+ARM/
 
 # Временные и служебные файлы Visual Studio
 .vs/
@@ -18,6 +22,9 @@ _deps/
 *.sln.docstates
 *.VC.db
 *.VC.opendb
+*.vsidx
+*.db-shm
+*.db-wal
 
 # Промежуточные бинарные файлы и артефакты компиляции
 *.obj
@@ -37,7 +44,7 @@ _deps/
 *.a
 *.lib
 
-# Кэш CMake (если запуск был напрямую в корне проекта)
+# Кэш CMake
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
@@ -46,22 +53,89 @@ Makefile
 !CMakeLists.txt
 !cmake/**
 
-# Временные файлы редакторов и ОС
-.vscode/
-.idea/
-Thumbs.db
-.DS_Store
-*.tmp
-*.log
+# Отчёты о покрытии C++ (OpenCppCoverage)
+coverage_html/
+lab4_coverage_report/
+*.cov
 
-# Python артефакты и кэши
+# ============================================
+# Python .gitignore
+# ============================================
+
+# Байткод и кэши
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Виртуальные окружения
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Дистрибутивы, пакеты и сборка PyInstaller
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# Тестирование и отчёты о покрытии (Coverage / Pytest / Unittest)
+htmlcov/
+.tox/
+.nox/
 .coverage
 .coverage.*
-htmlcov/
-*.pytest_cache/
-dist/
-build_pyinstaller/
-*.spec
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Временные файлы состояния и симуляции завода (ЛР №2)
+plant_state.json
+**/plant_state.json
+**/data/plant_state.json
+**/data/*.tmp
+
+# ============================================
+# IDE, редакторы кода и операционная система
+# ============================================
+
+.idea/
+**/.idea/
+.vscode/
+**/.vscode/
+*.swp
+*.swo
+*~
+
+Thumbs.db
+.DS_Store
+desktop.ini
+*.tmp
+*.log
+
+# Временные тестовые сценарии и файлы перенаправления
+manual_test_*.txt
+test_in.txt
+in.txt
+
+# Локальные файлы чеклистов и заданий преподавателя
+checklist.md
+lab*.md
