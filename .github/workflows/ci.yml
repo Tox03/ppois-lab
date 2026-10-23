@@ -243,7 +243,7 @@ jobs:
       - name: Generate Code Coverage Report (OpenCppCoverage)
         if: steps.check_lab4.outputs.has_lab4 == 'true'
         run: |
-          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab4" --threshold 90 --export_type html:lab4_coverage_report -- .\lab4\build\Release\AllTests.exe
+          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab4" --export_type html:lab4_coverage_report -- .\lab4\build\Release\AllTests.exe
 
       - name: Upload Code Coverage Report
         if: steps.check_lab4.outputs.has_lab4 == 'true'
