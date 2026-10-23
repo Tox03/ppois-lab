@@ -2,34 +2,36 @@
 
 #include <cstddef>
 #include <vector>
-#include <iterator>
+#include <functional>
 #include <stdexcept>
-#include <utility>
+#include <iterator>
+#include <cstdint>
 
 /**
- * @brief Класс, реализующий обобщённый алгоритм голубиной сортировки (Pigeonhole Sort).
- * Подходит для элементов с целочисленными ключами или объектов, для которых
- * задана функция извлечения целочисленного ключа (KeyExtractor).
+ * @brief Обобщённый класс голубиной сортировки (Pigeonhole sort).
+ * Эффективен при небольшом диапазоне ключей. Поддерживает как целочисленные типы,
+ * так и произвольные пользовательские объекты через функцию извлечения числового ключа.
+ * Предоставляет полную симметрию: сортировка по возрастанию и по убыванию.
  */
 class PigeonholeSort {
 public:
-    /// Максимально допустимый диапазон ключей для предотвращения чрезмерного выделения памяти
-    static constexpr long long MAX_ALLOWED_RANGE = 50000000LL;
+    /// Максимально допустимый диапазон значений ключей во избежание чрезмерного расхода памяти
+    static constexpr std::int64_t MAX_ALLOWED_RANGE = 50000000LL;
 
     /**
-     * @brief Сортировка диапазона с использованием пользовательской функции извлечения ключа.
-     * @tparam RandomIt Тип итератора.
-     * @tparam KeyExtractor Функция/лямбда, принимающая элемент и возвращающая целочисленный ключ (long long).
+     * @brief Сортировка диапазона [first, last) по возрастанию с заданной функцией извлечения ключа.
+     * @tparam RandomIt Тип итератора произвольного доступа.
+     * @tparam KeyExtractor Тип функции, извлекающей целочисленный ключ из элемента.
      * @param first Начало диапазона.
      * @param last Конец диапазона.
-     * @param key_extractor Функция извлечения ключа.
+     * @param key_extractor Функция извлечения целочисленного ключа.
      */
     template <typename RandomIt, typename KeyExtractor>
     static void sort(RandomIt first, RandomIt last, KeyExtractor key_extractor);
 
     /**
-     * @brief Сортировка диапазона целочисленных элементов (ключом является само значение).
-     * @tparam RandomIt Тип итератора.
+     * @brief Сортировка диапазона [first, last) по возрастанию (для целочисленных типов).
+     * @tparam RandomIt Тип итератора произвольного доступа.
      * @param first Начало диапазона.
      * @param last Конец диапазона.
      */
@@ -37,28 +39,100 @@ public:
     static void sort(RandomIt first, RandomIt last);
 
     /**
-     * @brief Сортировка вектора с функцией извлечения ключа.
+     * @brief Сортировка диапазона [first, last) по убыванию с заданной функцией извлечения ключа.
+     * @tparam RandomIt Тип итератора произвольного доступа.
+     * @tparam KeyExtractor Тип функции, извлекающей целочисленный ключ.
+     * @param first Начало диапазона.
+     * @param last Конец диапазона.
+     * @param key_extractor Функция извлечения ключа.
+     */
+    template <typename RandomIt, typename KeyExtractor>
+    static void sort_descending(RandomIt first, RandomIt last, KeyExtractor key_extractor);
+
+    /**
+     * @brief Сортировка диапазона [first, last) по убыванию (для целочисленных типов).
+     * @tparam RandomIt Тип итератора произвольного доступа.
+     * @param first Начало диапазона.
+     * @param last Конец диапазона.
+     */
+    template <typename RandomIt>
+    static void sort_descending(RandomIt first, RandomIt last);
+
+    /**
+     * @brief Сортировка вектора std::vector по возрастанию с функцией извлечения ключа.
+     * @tparam T Тип элементов вектора.
+     * @tparam KeyExtractor Тип функции извлечения ключа.
+     * @param vec Ссылка на сортируемый вектор.
+     * @param key_extractor Функция извлечения ключа.
      */
     template <typename T, typename KeyExtractor>
     static void sort(std::vector<T>& vec, KeyExtractor key_extractor);
 
     /**
-     * @brief Сортировка вектора целочисленных значений.
+     * @brief Сортировка вектора std::vector по возрастанию.
+     * @tparam T Тип элементов вектора.
+     * @param vec Ссылка на сортируемый вектор.
      */
     template <typename T>
     static void sort(std::vector<T>& vec);
 
     /**
-     * @brief Сортировка массива с функцией извлечения ключа.
+     * @brief Сортировка вектора std::vector по убыванию с функцией извлечения ключа.
+     * @tparam T Тип элементов вектора.
+     * @tparam KeyExtractor Тип функции извлечения ключа.
+     * @param vec Ссылка на сортируемый вектор.
+     * @param key_extractor Функция извлечения ключа.
      */
     template <typename T, typename KeyExtractor>
-    static void sort(T arr[], std::size_t size, KeyExtractor key_extractor);
+    static void sort_descending(std::vector<T>& vec, KeyExtractor key_extractor);
 
     /**
-     * @brief Сортировка массива целочисленных значений.
+     * @brief Сортировка вектора std::vector по убыванию.
+     * @tparam T Тип элементов вектора.
+     * @param vec Ссылка на сортируемый вектор.
      */
     template <typename T>
-    static void sort(T arr[], std::size_t size);
+    static void sort_descending(std::vector<T>& vec);
+
+    /**
+     * @brief Сортировка массива по возрастанию с функцией извлечения ключа.
+     * @tparam T Тип элементов массива.
+     * @tparam KeyExtractor Тип функции извлечения ключа.
+     * @param arr Указатель на начало массива.
+     * @param size Размер массива.
+     * @param key_extractor Функция извлечения ключа.
+     */
+    template <typename T, typename KeyExtractor>
+    static void sort(T* arr, std::size_t size, KeyExtractor key_extractor);
+
+    /**
+     * @brief Сортировка массива по возрастанию.
+     * @tparam T Тип элементов массива.
+     * @param arr Указатель на начало массива.
+     * @param size Размер массива.
+     */
+    template <typename T>
+    static void sort(T* arr, std::size_t size);
+
+    /**
+     * @brief Сортировка массива по убыванию с функцией извлечения ключа.
+     * @tparam T Тип элементов массива.
+     * @tparam KeyExtractor Тип функции извлечения ключа.
+     * @param arr Указатель на начало массива.
+     * @param size Размер массива.
+     * @param key_extractor Функция извлечения ключа.
+     */
+    template <typename T, typename KeyExtractor>
+    static void sort_descending(T* arr, std::size_t size, KeyExtractor key_extractor);
+
+    /**
+     * @brief Сортировка массива по убыванию.
+     * @tparam T Тип элементов массива.
+     * @param arr Указатель на начало массива.
+     * @param size Размер массива.
+     */
+    template <typename T>
+    static void sort_descending(T* arr, std::size_t size);
 };
 
 #include "sort/PigeonholeSort.cpp"

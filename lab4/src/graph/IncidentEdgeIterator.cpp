@@ -55,9 +55,9 @@ IncidentEdgeIterator<T>& IncidentEdgeIterator<T>::operator++() {
 // Постфиксный инкремент
 template <typename T>
 IncidentEdgeIterator<T> IncidentEdgeIterator<T>::operator++(int) {
-    IncidentEdgeIterator temp = *this;
+    IncidentEdgeIterator previous_state = *this;
     ++pos_;
-    return temp;
+    return previous_state;
 }
 
 // Префиксный декремент
@@ -73,9 +73,9 @@ IncidentEdgeIterator<T>& IncidentEdgeIterator<T>::operator--() {
 // Постфиксный декремент
 template <typename T>
 IncidentEdgeIterator<T> IncidentEdgeIterator<T>::operator--(int) {
-    IncidentEdgeIterator temp = *this;
+    IncidentEdgeIterator previous_state = *this;
     --(*this);
-    return temp;
+    return previous_state;
 }
 
 // Проверка равенства

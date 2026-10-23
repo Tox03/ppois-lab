@@ -47,3 +47,7 @@ class PollPost:
     def can_vote(self, post: Post) -> bool:
         """Проверяет доступность опроса для голосования."""
         return not self.is_closed and not post.is_deleted
+
+    def reopen_poll(self) -> None:
+        """Возобновляет прием голосов в опросе."""
+        self.is_closed = False

@@ -59,6 +59,10 @@ class TestCore(unittest.TestCase):
         profile.update_bio("Новая биография", privacy)
         self.assertEqual(profile.bio, "Новая биография")
         self.assertTrue(profile.verify_profile(True))
+        self.assertTrue(profile.is_verified)
+        profile.unverify_profile()
+        self.assertFalse(profile.is_verified)
+        profile.verify_profile(True)
         contact = ContactInfo(city="Минск", country="Беларусь")
         card = profile.format_profile_card(contact)
         self.assertIn("Минск, Беларусь", card)
@@ -87,6 +91,8 @@ class TestCore(unittest.TestCase):
         self.assertEqual(activity.current_status, "Работаю над кодом")
         activity.go_offline()
         self.assertFalse(activity.is_online)
+        activity.go_online()
+        self.assertTrue(activity.is_online)
 
     def test_user_reputation(self):
         rep = UserReputation()

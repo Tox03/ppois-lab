@@ -57,8 +57,13 @@ class TestCommunicationAndRelations(unittest.TestCase):
         self.assertEqual(member.role, "member")
         group.remove_participant(member)
         self.assertEqual(member.role, "banned")
+        member.unban()
+        self.assertFalse(member.is_banned)
+        self.assertEqual(member.role, "member")
         group.mute()
         self.assertTrue(group.is_muted)
+        group.unmute()
+        self.assertFalse(group.is_muted)
         invite = group.generate_invite(chat)
         self.assertIn("invite_c1", invite)
 
@@ -111,11 +116,15 @@ class TestCommunicationAndRelations(unittest.TestCase):
         self.assertIn("Спам в ЛС", block.format_block_notice())
         block.deactivate(self.user1)
         self.assertFalse(block.is_active)
+        block.activate(self.user1)
+        self.assertTrue(block.is_active)
 
     def test_user_group_and_events(self):
         group = UserGroup("grp_1", "Python Devs", "Сообщество питонистов", "u1")
         group.verify_group()
         self.assertTrue(group.is_verified)
+        group.unverify_group()
+        self.assertFalse(group.is_verified)
         self.assertTrue(group.close_group(self.user1))
 
         membership = GroupMembership("mem_1", "grp_1", "u2")

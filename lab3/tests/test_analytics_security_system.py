@@ -47,6 +47,8 @@ class TestAnalyticsSecuritySystem(unittest.TestCase):
         self.assertIn("обновлена", feed_status)
         other_status = feed.filter_by_algorithm(self.user2)
         self.assertEqual(other_status, "Чужая лента")
+        feed.remove_item()
+        self.assertEqual(feed.items_count, 0)
         feed.clear_feed()
         self.assertEqual(feed.items_count, 0)
 
@@ -121,6 +123,9 @@ class TestAnalyticsSecuritySystem(unittest.TestCase):
         self.assertTrue(two_fa.verify_otp("123"))
         two_fa.enable_2fa(self.user)
         self.assertTrue(two_fa.is_enabled)
+        two_fa.disable_2fa(self.user)
+        self.assertFalse(two_fa.is_enabled)
+        two_fa.enable_2fa(self.user)
         self.assertTrue(two_fa.verify_otp("123456"))
         with self.assertRaises(AuthenticationException):
             two_fa.verify_otp("bad")
@@ -150,6 +155,12 @@ class TestAnalyticsSecuritySystem(unittest.TestCase):
         rep = sys.generate_system_report()
         self.assertIn("MegaSocial", rep)
 
+        sys.delete_post(self.post)
+        self.assertEqual(sys.posts_count, 0)
+        self.assertTrue(self.post.is_deleted)
+        sys.remove_user(self.user)
+        self.assertEqual(sys.users_count, 0)
+
         search = SearchService()
         found_users = search.search_users("eva", [self.user, self.user2])
         self.assertEqual(len(found_users), 1)
@@ -166,6 +177,8 @@ class TestAnalyticsSecuritySystem(unittest.TestCase):
         self.assertTrue(backup.verify_checksum("sha256_mock_sum"))
         backup.mark_corrupted()
         self.assertEqual(backup.status, "corrupted")
+        backup.restore_snapshot()
+        self.assertEqual(backup.status, "restored")
 
 
 if __name__ == "__main__":

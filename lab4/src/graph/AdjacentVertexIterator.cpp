@@ -24,11 +24,11 @@ typename AdjacentVertexIterator<T>::reference AdjacentVertexIterator<T>::operato
     if (!vertices_ || !indices_ || pos_ >= indices_->size()) {
         throw GraphException("Разыменование недействительного итератора смежной вершины");
     }
-    std::size_t v_idx = (*indices_)[pos_];
-    if (v_idx >= vertices_->size()) {
+    std::size_t vertex_idx = (*indices_)[pos_];
+    if (vertex_idx >= vertices_->size()) {
         throw GraphException("Индекс смежной вершины выходит за границы контейнера");
     }
-    return (*vertices_)[v_idx];
+    return (*vertices_)[vertex_idx];
 }
 
 // Оператор стрелка
@@ -37,11 +37,11 @@ typename AdjacentVertexIterator<T>::pointer AdjacentVertexIterator<T>::operator-
     if (!vertices_ || !indices_ || pos_ >= indices_->size()) {
         throw GraphException("Доступ по недействительному итератору смежной вершины");
     }
-    std::size_t v_idx = (*indices_)[pos_];
-    if (v_idx >= vertices_->size()) {
+    std::size_t vertex_idx = (*indices_)[pos_];
+    if (vertex_idx >= vertices_->size()) {
         throw GraphException("Индекс смежной вершины выходит за границы контейнера");
     }
-    return &(*vertices_)[v_idx];
+    return &(*vertices_)[vertex_idx];
 }
 
 // Префиксный инкремент
@@ -54,9 +54,9 @@ AdjacentVertexIterator<T>& AdjacentVertexIterator<T>::operator++() {
 // Постфиксный инкремент
 template <typename T>
 AdjacentVertexIterator<T> AdjacentVertexIterator<T>::operator++(int) {
-    AdjacentVertexIterator temp = *this;
+    AdjacentVertexIterator previous_state = *this;
     ++pos_;
-    return temp;
+    return previous_state;
 }
 
 // Префиксный декремент
@@ -72,9 +72,9 @@ AdjacentVertexIterator<T>& AdjacentVertexIterator<T>::operator--() {
 // Постфиксный декремент
 template <typename T>
 AdjacentVertexIterator<T> AdjacentVertexIterator<T>::operator--(int) {
-    AdjacentVertexIterator temp = *this;
+    AdjacentVertexIterator previous_state = *this;
     --(*this);
-    return temp;
+    return previous_state;
 }
 
 // Проверка равенства

@@ -132,6 +132,84 @@ bool DirectedIncidenceMatrixGraph<T>::has_edge(const Edge<T>& e) const {
     return has_edge(e.getSource(), e.getTarget());
 }
 
+// Доступ по индексу с проверкой границ
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::reference
+DirectedIncidenceMatrixGraph<T>::at(size_type index) {
+    if (index >= vertices_.size()) {
+        throw GraphException("Индекс вершины выходит за пределы диапазона");
+    }
+    return vertices_[index];
+}
+
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::const_reference
+DirectedIncidenceMatrixGraph<T>::at(size_type index) const {
+    if (index >= vertices_.size()) {
+        throw GraphException("Индекс вершины выходит за пределы диапазона");
+    }
+    return vertices_[index];
+}
+
+// Оператор индексации
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::reference
+DirectedIncidenceMatrixGraph<T>::operator[](size_type index) {
+    return vertices_[index];
+}
+
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::const_reference
+DirectedIncidenceMatrixGraph<T>::operator[](size_type index) const {
+    return vertices_[index];
+}
+
+// Поиск вершины с возвратом итератора
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::vertex_iterator
+DirectedIncidenceMatrixGraph<T>::find_vertex(const T& v) {
+    for (std::size_t i = 0; i < vertices_.size(); ++i) {
+        if (vertices_[i] == v) {
+            return vertex_iterator(&vertices_, i);
+        }
+    }
+    return end();
+}
+
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::const_vertex_iterator
+DirectedIncidenceMatrixGraph<T>::find_vertex(const T& v) const {
+    for (std::size_t i = 0; i < vertices_.size(); ++i) {
+        if (vertices_[i] == v) {
+            return const_vertex_iterator(&vertices_, i);
+        }
+    }
+    return end();
+}
+
+// Поиск ребра с возвратом итератора
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::edge_iterator
+DirectedIncidenceMatrixGraph<T>::find_edge(const T& from, const T& to) {
+    for (std::size_t i = 0; i < edges_.size(); ++i) {
+        if (edges_[i].getSource() == from && edges_[i].getTarget() == to) {
+            return edge_iterator(&edges_, i);
+        }
+    }
+    return edges_end();
+}
+
+template <typename T>
+typename DirectedIncidenceMatrixGraph<T>::const_edge_iterator
+DirectedIncidenceMatrixGraph<T>::find_edge(const T& from, const T& to) const {
+    for (std::size_t i = 0; i < edges_.size(); ++i) {
+        if (edges_[i].getSource() == from && edges_[i].getTarget() == to) {
+            return const_edge_iterator(&edges_, i);
+        }
+    }
+    return edges_end();
+}
+
 // Добавление вершины
 template <typename T>
 void DirectedIncidenceMatrixGraph<T>::add_vertex(const T& v) {
@@ -139,7 +217,7 @@ void DirectedIncidenceMatrixGraph<T>::add_vertex(const T& v) {
         throw GraphException("Вершина уже существует в графе");
     }
     vertices_.push_back(v);
-    matrix_.push_back(std::vector<int>(edges_.size(), 0));
+    matrix_.push_back(std::vector<int>(edges_.size(), INCIDENCE_NONE));
 }
 
 // Добавление ребра

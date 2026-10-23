@@ -52,9 +52,9 @@ ConstEdgeIterator<T>& ConstEdgeIterator<T>::operator++() {
 // Постфиксный инкремент
 template <typename T>
 ConstEdgeIterator<T> ConstEdgeIterator<T>::operator++(int) {
-    ConstEdgeIterator temp = *this;
+    ConstEdgeIterator previous_state = *this;
     ++index_;
-    return temp;
+    return previous_state;
 }
 
 // Префиксный декремент
@@ -70,9 +70,9 @@ ConstEdgeIterator<T>& ConstEdgeIterator<T>::operator--() {
 // Постфиксный декремент
 template <typename T>
 ConstEdgeIterator<T> ConstEdgeIterator<T>::operator--(int) {
-    ConstEdgeIterator temp = *this;
+    ConstEdgeIterator previous_state = *this;
     --(*this);
-    return temp;
+    return previous_state;
 }
 
 // Проверка равенства

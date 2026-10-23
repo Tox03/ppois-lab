@@ -1,86 +1,101 @@
 #include <gtest/gtest.h>
-#include <vector>
 #include "sort/PigeonholeSort.h"
 #include "model/Student.h"
+#include <vector>
 
 TEST(PigeonholeSortTest, EmptyAndSingleElementVector) {
     std::vector<int> empty_vec;
     PigeonholeSort::sort(empty_vec);
     EXPECT_TRUE(empty_vec.empty());
 
-    std::vector<int> single_vec = {99};
+    PigeonholeSort::sort_descending(empty_vec);
+    EXPECT_TRUE(empty_vec.empty());
+
+    std::vector<int> single_vec = {100};
     PigeonholeSort::sort(single_vec);
     ASSERT_EQ(single_vec.size(), 1u);
-    EXPECT_EQ(single_vec[0], 99);
+    EXPECT_EQ(single_vec[0], 100);
+
+    PigeonholeSort::sort_descending(single_vec);
+    ASSERT_EQ(single_vec.size(), 1u);
+    EXPECT_EQ(single_vec[0], 100);
 }
 
-TEST(PigeonholeSortTest, IntegralNumbersSorting) {
-    std::vector<int> data = {8, 3, 2, 7, 4, 6, 8, 3, 1, 5};
-    PigeonholeSort::sort(data);
-    std::vector<int> expected = {1, 2, 3, 3, 4, 5, 6, 7, 8, 8};
-    EXPECT_EQ(data, expected);
+TEST(PigeonholeSortTest, SortWithNegativeNumbersAndDuplicates) {
+    std::vector<int> numbers = {-5, 12, -10, 0, 7, -5, 12, 3};
+    std::vector<int> expected_asc = {-10, -5, -5, 0, 3, 7, 12, 12};
+    std::vector<int> expected_desc = {12, 12, 7, 3, 0, -5, -5, -10};
+
+    PigeonholeSort::sort(numbers);
+    EXPECT_EQ(numbers, expected_asc);
+
+    PigeonholeSort::sort_descending(numbers);
+    EXPECT_EQ(numbers, expected_desc);
 }
 
-TEST(PigeonholeSortTest, NegativeNumbersSorting) {
-    std::vector<int> data = {-5, 10, -2, 0, 7, -5, 3};
-    PigeonholeSort::sort(data);
-    std::vector<int> expected = {-5, -5, -2, 0, 3, 7, 10};
-    EXPECT_EQ(data, expected);
-}
+TEST(PigeonholeSortTest, SortRawArray) {
+    int arr[] = {8, 3, 2, 7, 4, 6, 8};
+    const std::size_t size = 7;
 
-TEST(PigeonholeSortTest, RawArraySorting) {
-    int arr[] = {20, 15, 10, 25, 10, 5};
-    std::size_t size = sizeof(arr) / sizeof(arr[0]);
     PigeonholeSort::sort(arr, size);
-    int expected[] = {5, 10, 10, 15, 20, 25};
-    for (std::size_t i = 0; i < size; ++i) {
-        EXPECT_EQ(arr[i], expected[i]);
-    }
+    EXPECT_EQ(arr[0], 2);
+    EXPECT_EQ(arr[1], 3);
+    EXPECT_EQ(arr[2], 4);
+    EXPECT_EQ(arr[3], 6);
+    EXPECT_EQ(arr[4], 7);
+    EXPECT_EQ(arr[5], 8);
+    EXPECT_EQ(arr[6], 8);
 
-    PigeonholeSort::sort(static_cast<int*>(nullptr), 0);
+    PigeonholeSort::sort_descending(arr, size);
+    EXPECT_EQ(arr[0], 8);
+    EXPECT_EQ(arr[1], 8);
+    EXPECT_EQ(arr[2], 7);
+    EXPECT_EQ(arr[3], 6);
+    EXPECT_EQ(arr[4], 4);
+    EXPECT_EQ(arr[5], 3);
+    EXPECT_EQ(arr[6], 2);
+
+    PigeonholeSort::sort<int>(nullptr, 0);
+    PigeonholeSort::sort_descending<int>(nullptr, 0);
 }
 
-TEST(PigeonholeSortTest, UserDefinedObjectsWithKeyExtractor) {
+TEST(PigeonholeSortTest, SortStudentsWithKeyExtractor) {
     std::vector<Student> students = {
-        Student(104, "Васильев Василий", 4.1, 22),
-        Student(101, "Петров Петр", 4.8, 19),
-        Student(103, "Иванов Иван", 4.2, 20),
-        Student(102, "Алексеев Алексей", 5.0, 18)
+        Student(1, "Alice", 85),
+        Student(2, "Bob", 70),
+        Student(3, "Charlie", 95),
+        Student(4, "Diana", 60)
     };
 
-    // Сортировка по ID
-    PigeonholeSort::sort(students, [](const Student& s) {
-        return static_cast<long long>(s.getId());
-    });
-    EXPECT_EQ(students[0].getId(), 101);
-    EXPECT_EQ(students[1].getId(), 102);
-    EXPECT_EQ(students[2].getId(), 103);
-    EXPECT_EQ(students[3].getId(), 104);
-
-    // Сортировка по возрасту
-    PigeonholeSort::sort(students, [](const Student& s) {
-        return static_cast<long long>(s.getAge());
-    });
-    EXPECT_EQ(students[0].getAge(), 18);
-    EXPECT_EQ(students[1].getAge(), 19);
-    EXPECT_EQ(students[2].getAge(), 20);
-    EXPECT_EQ(students[3].getAge(), 22);
-
-    // Сортировка массива студентов
-    Student arr_s[] = {
-        Student(50, "A", 3.0, 30),
-        Student(20, "B", 4.0, 20),
-        Student(40, "C", 5.0, 25)
+    auto extractor = [](const Student& s) {
+        return static_cast<std::int64_t>(s.getRating());
     };
-    PigeonholeSort::sort(arr_s, 3, [](const Student& s) {
-        return static_cast<long long>(s.getId());
-    });
-    EXPECT_EQ(arr_s[0].getId(), 20);
-    EXPECT_EQ(arr_s[1].getId(), 40);
-    EXPECT_EQ(arr_s[2].getId(), 50);
+
+    PigeonholeSort::sort(students, extractor);
+    EXPECT_EQ(students[0].getName(), "Diana");
+    EXPECT_EQ(students[1].getName(), "Bob");
+    EXPECT_EQ(students[2].getName(), "Alice");
+    EXPECT_EQ(students[3].getName(), "Charlie");
+
+    PigeonholeSort::sort_descending(students, extractor);
+    EXPECT_EQ(students[0].getName(), "Charlie");
+    EXPECT_EQ(students[1].getName(), "Alice");
+    EXPECT_EQ(students[2].getName(), "Bob");
+    EXPECT_EQ(students[3].getName(), "Diana");
+
+    // Также проверка для raw array объектов Student
+    Student s_arr[] = { Student(10, "S1", 90), Student(20, "S2", 50) };
+    PigeonholeSort::sort(s_arr, 2, extractor);
+    EXPECT_EQ(s_arr[0].getRating(), 50);
+    EXPECT_EQ(s_arr[1].getRating(), 90);
+
+    PigeonholeSort::sort_descending(s_arr, 2, extractor);
+    EXPECT_EQ(s_arr[0].getRating(), 90);
+    EXPECT_EQ(s_arr[1].getRating(), 50);
 }
 
-TEST(PigeonholeSortTest, RangeTooLargeThrowsException) {
-    std::vector<long long> extreme = {0LL, 100000000LL};
-    EXPECT_THROW(PigeonholeSort::sort(extreme), std::invalid_argument);
+TEST(PigeonholeSortTest, RangeLimitExceededThrowsException) {
+    std::vector<std::int64_t> huge_range = {0, 60000000LL};
+    EXPECT_THROW(PigeonholeSort::sort(huge_range), std::invalid_argument);
+    EXPECT_THROW(PigeonholeSort::sort_descending(huge_range), std::invalid_argument);
 }

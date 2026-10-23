@@ -149,6 +149,32 @@ public:
     bool has_edge(const Edge<T>& e) const;
 
     /**
+     * @brief Доступ к вершине по индексу с проверкой границ.
+     */
+    reference at(size_type index);
+    const_reference at(size_type index) const;
+
+    /**
+     * @brief Оператор доступа к вершине по индексу.
+     */
+    reference operator[](size_type index);
+    const_reference operator[](size_type index) const;
+
+    /**
+     * @brief Найти вершину и вернуть итератор на неё.
+     * @return vertex_iterator или end(), если не найдена.
+     */
+    vertex_iterator find_vertex(const T& v);
+    const_vertex_iterator find_vertex(const T& v) const;
+
+    /**
+     * @brief Найти ребро и вернуть итератор на него.
+     * @return edge_iterator или edges_end(), если не найдено.
+     */
+    edge_iterator find_edge(const T& from, const T& to);
+    const_edge_iterator find_edge(const T& from, const T& to) const;
+
+    /**
      * @brief Добавить вершину в граф.
      * @throws GraphException если вершина уже существует.
      */
@@ -276,6 +302,57 @@ public:
     bool operator<=(const DirectedIncidenceMatrixGraph& other) const;
     bool operator>(const DirectedIncidenceMatrixGraph& other) const;
     bool operator>=(const DirectedIncidenceMatrixGraph& other) const;
+
+    // --- Удобные псевдонимы методов (CamelCase) для расширенной совместимости ---
+    void insertVertex(const T& v) { add_vertex(v); }
+    bool eraseVertex(const T& v) { return remove_vertex(v); }
+    void insertEdge(const T& from, const T& to) { add_edge(from, to); }
+    bool eraseEdge(const T& from, const T& to) { return remove_edge(from, to); }
+    bool hasVertex(const T& v) const { return has_vertex(v); }
+    bool hasEdge(const T& from, const T& to) const { return has_edge(from, to); }
+    size_type vertexCount() const noexcept { return vertex_count(); }
+    size_type edgeCount() const noexcept { return edge_count(); }
+    size_type degree(const T& v) const { return vertex_degree(v); }
+    size_type inDegree(const T& v) const { return vertex_in_degree(v); }
+    size_type outDegree(const T& v) const { return vertex_out_degree(v); }
+    size_type edgeDegree(const Edge<T>& e) const { return edge_degree(e); }
+    size_type edgeDegree(const T& from, const T& to) const { return edge_degree(from, to); }
+
+    vertex_iterator verticesBegin() { return begin(); }
+    vertex_iterator verticesEnd() { return end(); }
+    const_vertex_iterator verticesBegin() const { return begin(); }
+    const_vertex_iterator verticesEnd() const { return end(); }
+    reverse_vertex_iterator verticesRBegin() { return rbegin(); }
+    reverse_vertex_iterator verticesREnd() { return rend(); }
+    const_reverse_vertex_iterator verticesRBegin() const { return rbegin(); }
+    const_reverse_vertex_iterator verticesREnd() const { return rend(); }
+
+    edge_iterator edgesBegin() { return edges_begin(); }
+    edge_iterator edgesEnd() { return edges_end(); }
+    const_edge_iterator edgesBegin() const { return edges_begin(); }
+    const_edge_iterator edgesEnd() const { return edges_end(); }
+    reverse_edge_iterator edgesRBegin() { return edges_rbegin(); }
+    reverse_edge_iterator edgesREnd() { return edges_rend(); }
+    const_reverse_edge_iterator edgesRBegin() const { return edges_rbegin(); }
+    const_reverse_edge_iterator edgesREnd() const { return edges_rend(); }
+
+    incident_edge_iterator incidentEdgesBegin(const T& v) { return incident_edges_begin(v); }
+    incident_edge_iterator incidentEdgesEnd(const T& v) { return incident_edges_end(v); }
+    const_incident_edge_iterator incidentEdgesBegin(const T& v) const { return incident_edges_begin(v); }
+    const_incident_edge_iterator incidentEdgesEnd(const T& v) const { return incident_edges_end(v); }
+    reverse_incident_edge_iterator incidentEdgesRBegin(const T& v) { return incident_edges_rbegin(v); }
+    reverse_incident_edge_iterator incidentEdgesREnd(const T& v) { return incident_edges_rend(v); }
+    const_reverse_incident_edge_iterator incidentEdgesRBegin(const T& v) const { return incident_edges_rbegin(v); }
+    const_reverse_incident_edge_iterator incidentEdgesREnd(const T& v) const { return incident_edges_rend(v); }
+
+    adjacent_vertex_iterator adjacentVerticesBegin(const T& v) { return adjacent_vertices_begin(v); }
+    adjacent_vertex_iterator adjacentVerticesEnd(const T& v) { return adjacent_vertices_end(v); }
+    const_adjacent_vertex_iterator adjacentVerticesBegin(const T& v) const { return adjacent_vertices_begin(v); }
+    const_adjacent_vertex_iterator adjacentVerticesEnd(const T& v) const { return adjacent_vertices_end(v); }
+    reverse_adjacent_vertex_iterator adjacentVerticesRBegin(const T& v) { return adjacent_vertices_rbegin(v); }
+    reverse_adjacent_vertex_iterator adjacentVerticesREnd(const T& v) { return adjacent_vertices_rend(v); }
+    const_reverse_adjacent_vertex_iterator adjacentVerticesRBegin(const T& v) const { return adjacent_vertices_rbegin(v); }
+    const_reverse_adjacent_vertex_iterator adjacentVerticesREnd(const T& v) const { return adjacent_vertices_rend(v); }
 
     // Вспомогательный метод для демонстрации матрицы
     const std::vector<std::vector<int>>& getIncidenceMatrix() const;

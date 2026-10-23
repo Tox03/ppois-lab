@@ -48,3 +48,7 @@ class Post:
         if author.user_id != self.author_id:
             raise InvalidContentException("Редактировать запись может только автор")
         self.text_content = new_text
+
+    def restore(self) -> None:
+        """Восстанавливает ранее удаленную публикацию."""
+        self.is_deleted = False

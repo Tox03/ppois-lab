@@ -4,8 +4,8 @@
 #include <iostream>
 
 /**
- * @brief Пользовательский класс «Студент» для демонстрации сортировок и контейнера.
- * Содержит идентификатор, ФИО, средний балл и возраст.
+ * @brief Пользовательский класс студента для демонстрации сортировки
+ * и работы обобщённого графа с пользовательскими типами данных.
  */
 class Student {
 public:
@@ -16,56 +16,48 @@ public:
 
     /**
      * @brief Параметризованный конструктор.
-     * @param id Идентификатор студента.
-     * @param name ФИО студента.
-     * @param gpa Средний балл (GPA).
-     * @param age Возраст студента.
+     * @param id Уникальный идентификатор студента.
+     * @param name Имя студента.
+     * @param rating Рейтинг (баллы) студента.
      */
-    Student(int id, const std::string& name, double gpa, int age);
+    Student(int id, const std::string& name, int rating);
 
     /**
      * @brief Получить идентификатор студента.
+     * @return Идентификатор.
      */
     int getId() const;
 
     /**
-     * @brief Получить ФИО студента.
-     */
-    const std::string& getName() const;
-
-    /**
-     * @brief Получить средний балл студента.
-     */
-    double getGpa() const;
-
-    /**
-     * @brief Получить возраст студента.
-     */
-    int getAge() const;
-
-    /**
      * @brief Установить идентификатор студента.
+     * @param id Новый идентификатор.
      */
     void setId(int id);
 
     /**
-     * @brief Установить ФИО студента.
+     * @brief Получить имя студента.
+     * @return Имя студента.
+     */
+    const std::string& getName() const;
+
+    /**
+     * @brief Установить имя студента.
+     * @param name Новое имя студента.
      */
     void setName(const std::string& name);
 
     /**
-     * @brief Установить средний балл.
+     * @brief Получить рейтинг студента.
+     * @return Рейтинг студента.
      */
-    void setGpa(double gpa);
+    int getRating() const;
 
     /**
-     * @brief Установить возраст.
+     * @brief Установить рейтинг студента.
+     * @param rating Новый рейтинг студента.
      */
-    void setAge(int age);
+    void setRating(int rating);
 
-    /**
-     * @brief Операторы сравнения (по умолчанию сравнивают по id).
-     */
     bool operator==(const Student& other) const;
     bool operator!=(const Student& other) const;
     bool operator<(const Student& other) const;
@@ -73,19 +65,10 @@ public:
     bool operator>(const Student& other) const;
     bool operator>=(const Student& other) const;
 
-    /**
-     * @brief Оператор вывода в поток.
-     */
     friend std::ostream& operator<<(std::ostream& os, const Student& student);
 
-    /**
-     * @brief Оператор ввода из потока.
-     */
-    friend std::istream& operator>>(std::istream& is, Student& student);
-
 private:
-    int id_{0};                 ///< Идентификатор студента
-    std::string name_{};        ///< ФИО студента
-    double gpa_{0.0};           ///< Средний балл
-    int age_{0};                ///< Возраст студента
+    int id_;              ///< Идентификатор студента
+    std::string name_;    ///< Имя студента
+    int rating_;          ///< Рейтинг студента
 };

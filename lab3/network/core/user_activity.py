@@ -40,3 +40,8 @@ class UserActivity:
         """Переводит пользователя в режим офлайн."""
         self.is_online = False
         self.current_status = "offline"
+
+    def go_online(self) -> None:
+        """Переводит пользователя в режим онлайн."""
+        self.is_online = True
+        self.current_status = "online"

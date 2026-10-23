@@ -51,9 +51,9 @@ ConstVertexIterator<T>& ConstVertexIterator<T>::operator++() {
 // Постфиксный инкремент
 template <typename T>
 ConstVertexIterator<T> ConstVertexIterator<T>::operator++(int) {
-    ConstVertexIterator temp = *this;
+    ConstVertexIterator previous_state = *this;
     ++index_;
-    return temp;
+    return previous_state;
 }
 
 // Префиксный декремент
@@ -69,9 +69,9 @@ ConstVertexIterator<T>& ConstVertexIterator<T>::operator--() {
 // Постфиксный декремент
 template <typename T>
 ConstVertexIterator<T> ConstVertexIterator<T>::operator--(int) {
-    ConstVertexIterator temp = *this;
+    ConstVertexIterator previous_state = *this;
     --(*this);
-    return temp;
+    return previous_state;
 }
 
 // Проверка равенства

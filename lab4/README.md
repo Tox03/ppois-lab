@@ -1,154 +1,125 @@
-# Лабораторная работа №4. Обобщённое программирование: сортировка и контейнеры
+# Лабораторная работа №4: Обобщённое программирование (Сортировка и Графы)
 
-**Вариант 4**:
-- **Задание 1 (Сортировка)**: Gnome sort (гномья сортировка), Pigeonhole sort (голубиная сортировка), собственный класс `Student` для демонстрации сортировки.
-- **Задание 2 (Контейнер: Графы)**: Раздел 2.1.4. **Ориентированный граф (матрица инцидентности)**.
+## Вариант 4
+
+- **Задание 1. Алгоритмы сортировки:**
+  - **Gnome sort** (Гномья сортировка) — симметричные варианты сортировки по возрастанию и убыванию, поддержка произвольных итераторов, `std::vector` и встроенных массивов C++, пользовательские компараторы.
+  - **Pigeonhole sort** (Голубиная сортировка) — симметричные варианты сортировки по возрастанию и убыванию для числовых типов и пользовательских объектов с функцией извлечения целочисленного ключа.
+  - **Пользовательский класс:** `Student` (демонстрация сортировки объектов по рейтингу, имени и идентификатору).
+
+- **Задание 2. Обобщённый контейнер графа:**
+  - **Ориентированный граф на основе матрицы инцидентности** (`DirectedIncidenceMatrixGraph<T>`).
+  - Полное сокрытие внутреннего представления.
+  - Двунаправленные и обратные итераторы:
+    - Итераторы вершин (`vertex_iterator`, `const_vertex_iterator`, `reverse_vertex_iterator`, `const_reverse_vertex_iterator`)
+    - Итераторы рёбер (`edge_iterator`, `const_edge_iterator`, `reverse_edge_iterator`, `const_reverse_edge_iterator`)
+    - Итераторы инцидентных рёбер (`incident_edge_iterator`, `const_incident_edge_iterator`, `reverse_incident_edge_iterator`, `const_reverse_incident_edge_iterator`)
+    - Итераторы смежных вершин (`adjacent_vertex_iterator`, `const_adjacent_vertex_iterator`, `reverse_adjacent_vertex_iterator`, `const_reverse_adjacent_vertex_iterator`)
+  - Симметричные операции:
+    - Добавление / удаление вершин (`insertVertex` / `eraseVertex`)
+    - Добавление / удаление рёбер (`insertEdge` / `eraseEdge`)
+    - Проверка наличия (`hasVertex`, `hasEdge`)
+    - Очистка и проверка на пустоту (`clear`, `empty`)
+    - Прямой и обратный обход
+    - Вычисление степеней (полустепень захода `inDegree`, исхода `outDegree`, общая степень `degree`)
+    - Операции сравнения (`==`, `!=`, `<`, `<=`, `>`, `>=`)
+    - Вывод матрицы инцидентности (`printIncidenceMatrix`)
 
 ---
 
-## 1. Требования и особенности реализации
+## Архитектура и структура проекта
 
-1. **Язык программирования**: C++ (стандарт C++17).
-2. **Строгая модульность**: каждый класс находится в **отдельном `.h` и `.cpp` файле** (ни в одном файле нет двух классов или структур).
-3. **Комментарии**: все комментарии в коде написаны на **русском языке**.
-4. **Инкапсуляция**: контейнер скрывает внутреннее представление матрицы инцидентности — доступ к вершинам и рёбрам осуществляется исключительно через открытые методы и итераторы.
-5. **Итераторы**: для всех видов обхода (вершины, рёбра, инцидентные рёбра вершины, смежные вершины) реализованы **двунаправленные итераторы** (`bidirectional_iterator`), а также их **константные (`const`)** и **обратные (`reverse`)** модификации.
-6. **Вывод контейнера**: `operator<<` реализован с использованием итераторов и обобщённого алгоритма `std::for_each`.
-7. **Тестирование**: модульные тесты на GoogleTest с покрытием более 90% (47 тестов).
-8. **Пользовательский интерфейс**: полнофункциональное консольное меню (`ConsoleMenu`) и поддержка CLI-ключа `--demo`.
+В соответствии с требованиями чеклиста и задания:
+- Каждый класс вынесен в **отдельный .h и .cpp файл** (ни в одном файле нет двух классов).
+- Все комментарии в коде написаны на русском языке.
+- Отсутствуют магические числа (все константы явно именованы).
+- Соблюдена строгая симметрия всех операций интерфейса и классов.
 
----
-
-## 2. Структура проекта
-
-```text
+```
 lab4/
 ├── CMakeLists.txt
 ├── README.md
 ├── include/
 │   ├── graph/
-│   │   ├── GraphException.h             # Класс исключений графа
-│   │   ├── Edge.h                       # Класс ориентированного ребра Edge<T>
-│   │   ├── VertexIterator.h             # Двунаправленный итератор вершин
-│   │   ├── ConstVertexIterator.h        # Константный итератор вершин
-│   │   ├── EdgeIterator.h               # Двунаправленный итератор рёбер
-│   │   ├── ConstEdgeIterator.h          # Константный итератор рёбер
-│   │   ├── IncidentEdgeIterator.h       # Итератор рёбер, инцидентных вершине
-│   │   ├── ConstIncidentEdgeIterator.h  # Константный итератор инцидентных рёбер
-│   │   ├── AdjacentVertexIterator.h     # Итератор смежных вершин
-│   │   ├── ConstAdjacentVertexIterator.h# Константный итератор смежных вершин
-│   │   └── DirectedIncidenceMatrixGraph.h # Шаблон ориентированного графа
-│   ├── sort/
-│   │   ├── GnomeSort.h                  # Гномья сортировка
-│   │   └── PigeonholeSort.h             # Голубиная сортировка
+│   │   ├── AdjacentVertexIterator.h
+│   │   ├── ConstAdjacentVertexIterator.h
+│   │   ├── ConstEdgeIterator.h
+│   │   ├── ConstIncidentEdgeIterator.h
+│   │   ├── ConstVertexIterator.h
+│   │   ├── DirectedIncidenceMatrixGraph.h
+│   │   ├── Edge.h
+│   │   ├── EdgeIterator.h
+│   │   ├── GraphException.h
+│   │   ├── IncidentEdgeIterator.h
+│   │   └── VertexIterator.h
 │   ├── model/
-│   │   └── Student.h                    # Демонстрационный класс Студент
+│   │   └── Student.h
+│   ├── sort/
+│   │   ├── GnomeSort.h
+│   │   └── PigeonholeSort.h
 │   └── ui/
-│       └── ConsoleMenu.h                # Консольное меню и CLI
+│       └── ConsoleMenu.h
 ├── src/
-│   ├── graph/                           # Реализации методов классов (по 1 на файл)
-│   │   ├── GraphException.cpp
-│   │   ├── Edge.cpp
-│   │   ├── VertexIterator.cpp
-│   │   ├── ConstVertexIterator.cpp
-│   │   ├── EdgeIterator.cpp
-│   │   ├── ConstEdgeIterator.cpp
-│   │   ├── IncidentEdgeIterator.cpp
-│   │   ├── ConstIncidentEdgeIterator.cpp
+│   ├── graph/
 │   │   ├── AdjacentVertexIterator.cpp
 │   │   ├── ConstAdjacentVertexIterator.cpp
-│   │   └── DirectedIncidenceMatrixGraph.cpp
+│   │   ├── ConstEdgeIterator.cpp
+│   │   ├── ConstIncidentEdgeIterator.cpp
+│   │   ├── ConstVertexIterator.cpp
+│   │   ├── DirectedIncidenceMatrixGraph.cpp
+│   │   ├── Edge.cpp
+│   │   ├── EdgeIterator.cpp
+│   │   ├── GraphException.cpp
+│   │   ├── IncidentEdgeIterator.cpp
+│   │   └── VertexIterator.cpp
+│   ├── model/
+│   │   └── Student.cpp
 │   ├── sort/
 │   │   ├── GnomeSort.cpp
 │   │   └── PigeonholeSort.cpp
-│   ├── model/
-│   │   └── Student.cpp
 │   ├── ui/
 │   │   └── ConsoleMenu.cpp
-│   └── main.cpp                         # Точка входа
+│   └── main.cpp
 └── tests/
-    ├── test_gnome_sort.cpp              # Тесты гномьей сортировки
-    ├── test_pigeonhole_sort.cpp         # Тесты голубиной сортировки
-    ├── test_student.cpp                 # Тесты класса Student
-    ├── test_edge.cpp                    # Тесты класса Edge
-    ├── test_graph_core.cpp              # Тесты базовой логики графа
-    ├── test_graph_iterators.cpp         # Тесты итераторов графа
-    ├── test_exceptions.cpp              # Тесты исключений
-    └── test_console_menu.cpp            # Тесты UI и меню
+    ├── test_console_menu.cpp
+    ├── test_edge.cpp
+    ├── test_exceptions.cpp
+    ├── test_gnome_sort.cpp
+    ├── test_graph_core.cpp
+    ├── test_graph_iterators.cpp
+    ├── test_pigeonhole_sort.cpp
+    └── test_student.cpp
 ```
 
 ---
 
-## 3. Описание реализованных компонентов
+## Сборка и запуск
 
-### Задание 1. Сортировка
+### 1. Сборка через CMake
 
-1. **`GnomeSort`**:
-   - Обобщённая гномья сортировка, работающая с диапазонами `[first, last)`, `std::vector<T>` и обычными массивами `T arr[]`.
-   - Поддерживает произвольные пользовательские компараторы (по умолчанию `std::less<T>`), стабильна по отношению к одинаковым элементам.
-   - Продемонстрирована на числах, строках и объектах `Student` (по умолчанию по ID, а также по GPA и имени с лямбда-функциями).
-2. **`PigeonholeSort`**:
-   - Голубиная сортировка со сложностью $O(N + Range)$, подходящая для целочисленных данных и объектов с целочисленным ключом.
-   - Поддерживает диапазон с отрицательными числами (автоматический сдвиг на минимум) и дубликаты.
-   - Поддерживает произвольный `KeyExtractor` (проектор объекта в целочисленный ключ).
-   - Продемонстрирована на векторе и массиве `int`, а также на объектах `Student` с сортировкой по ID и по возрасту.
-3. **`Student`**:
-   - Пользовательский класс с полями `id`, `name`, `gpa`, `age`, перегруженными операторами сравнения (`<`, `<=`, `>`, `>=`, `==`, `!=`) и потокового ввода/вывода (`<<`, `>>`).
-
-### Задание 2. Контейнер: Ориентированный граф (матрица инцидентности)
-
-Класс `DirectedIncidenceMatrixGraph<T>` хранит граф в виде матрицы инцидентности размера $|V| \times |E|$:
-- Элемент `-1`: вершина является источником ребра (ребро исходит из неё).
-- Элемент `+1`: вершина является приёмником ребра (ребро входит в неё).
-- Элемент `2`: петля (ребро начинается и заканчивается в одной вершине).
-- Элемент `0`: вершина не инцидентна ребру.
-
-#### Реализованный интерфейс:
-- **Конструкторы и деструктор**: конструктор по умолчанию, глубокое копирование, перемещение, присваивание копированием и перемещением.
-- **Проверки и размер**: `empty()`, `is_empty()`, `vertex_count()`, `size()`, `edge_count()`, `clear()`.
-- **Проверка присутствия**: `has_vertex(v)`, `has_edge(from, to)`, `has_edge(Edge)`.
-- **Модификаторы**:
-  - `add_vertex(v)` (выбрасывает `GraphException` при дубликате);
-  - `add_edge(from, to)` (поддерживает обычные рёбра и петли, выбрасывает `GraphException` при дубликате или отсутствии вершин);
-  - `remove_vertex(v)` (удаляет вершину и все инцидентные ей рёбра);
-  - `remove_edge(from, to)`;
-  - `remove_vertex(it)` / `erase(it)` (удаление вершины по итератору с возвратом итератора на следующий элемент);
-  - `remove_edge(it)` / `erase(it)` (удаление ребра по итератору с возвратом итератора на следующее ребро).
-- **Степени**:
-  - `vertex_in_degree(v)` — полустепень захода вершины;
-  - `vertex_out_degree(v)` — полустепень исхода вершины;
-  - `vertex_degree(v)` — полная степень вершины (сумма захода и исхода);
-  - `edge_degree(Edge)` — степень ребра (количество других рёбер, смежных с ним).
-- **Итераторы (каждый с `const` и `reverse` модификациями)**:
-  - Вершины: `begin()`, `end()`, `cbegin()`, `cend()`, `rbegin()`, `rend()`, `crbegin()`, `crend()`;
-  - Рёбра: `edges_begin()`, `edges_end()`, `edges_cbegin()`, `edges_cend()`, `edges_rbegin()`, `edges_rend()`, `edges_crbegin()`, `edges_crend()`;
-  - Инцидентные рёбра: `incident_edges_begin(v)`, `incident_edges_end(v)`, ..., `incident_edges_crbegin(v)`, `incident_edges_crend(v)`;
-  - Смежные вершины: `adjacent_vertices_begin(v)`, `adjacent_vertices_end(v)`, ..., `adjacent_vertices_crbegin(v)`, `adjacent_vertices_crend(v)`.
-- **Операторы сравнения**: `==`, `!=`, `<`, `<=`, `>`, `>=`.
-- **Вывод**: перегруженный `operator<<`, форматирующий граф с использованием `std::for_each` и итераторов контейнера.
-
----
-
-## 4. Сборка и запуск
-
-### Сборка через CMake (Visual Studio MSVC / Ninja):
-```powershell
-cd lab4
-cmake -B build -S .
-cmake --build build --config Release
+```bash
+cmake -S lab4 -B lab4/build -DCMAKE_BUILD_TYPE=Release
+cmake --build lab4/build --config Release --parallel
 ```
 
-### Запуск тестов:
-```powershell
-./build/Release/AllTests.exe
+### 2. Запуск модульных тестов
+
+```bash
+# Windows
+.\lab4\build\Release\AllTests.exe
+
+# Linux / macOS
+./lab4/build/AllTests
 ```
 
-### Запуск программы:
-1. **Интерактивное консольное меню**:
-   ```powershell
-   ./build/Release/ppois-lab4.exe
-   ```
-2. **Автоматическая демонстрация возможностей**:
-   ```powershell
-   ./build/Release/ppois-lab4.exe --demo
-   ```
+### 3. Запуск интерактивного консольного меню
+
+```bash
+.\lab4\build\Release\ppois-lab4.exe
+```
+
+### 4. Запуск автоматической демонстрации (--demo)
+
+```bash
+.\lab4\build\Release\ppois-lab4.exe --demo
+```

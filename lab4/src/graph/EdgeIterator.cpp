@@ -45,9 +45,9 @@ EdgeIterator<T>& EdgeIterator<T>::operator++() {
 // Постфиксный инкремент
 template <typename T>
 EdgeIterator<T> EdgeIterator<T>::operator++(int) {
-    EdgeIterator temp = *this;
+    EdgeIterator previous_state = *this;
     ++index_;
-    return temp;
+    return previous_state;
 }
 
 // Префиксный декремент
@@ -63,9 +63,9 @@ EdgeIterator<T>& EdgeIterator<T>::operator--() {
 // Постфиксный декремент
 template <typename T>
 EdgeIterator<T> EdgeIterator<T>::operator--(int) {
-    EdgeIterator temp = *this;
+    EdgeIterator previous_state = *this;
     --(*this);
-    return temp;
+    return previous_state;
 }
 
 // Проверка равенства

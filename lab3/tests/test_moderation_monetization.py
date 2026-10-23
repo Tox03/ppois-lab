@@ -54,6 +54,8 @@ class TestModerationAndMonetization(unittest.TestCase):
         self.assertIn("******", censored)
         count = word_filter.add_keyword("покер")
         self.assertEqual(count, 1)
+        left = word_filter.remove_keyword("покер")
+        self.assertEqual(left, 0)
 
         cf = ContentFilter(spam_threshold=0.5)
         cf.update_threshold(0.7)
@@ -66,6 +68,10 @@ class TestModerationAndMonetization(unittest.TestCase):
         self.assertTrue(sanction.is_active_sanction(self.user))
         sanction.extend_duration(2)
         self.assertEqual(sanction.duration_days, 5)
+        sanction.revoke()
+        self.assertTrue(sanction.is_revoked)
+        sanction.apply_sanction()
+        self.assertFalse(sanction.is_revoked)
 
         appeal = Appeal("app_1", "sanc_1", "u1", "Это была ошибка")
         self.assertTrue(appeal.is_under_review())
@@ -122,6 +128,8 @@ class TestModerationAndMonetization(unittest.TestCase):
         self.assertEqual(sub.expires_at, "2027-06-01")
         sub.cancel_auto_renew()
         self.assertFalse(sub.auto_renew)
+        sub.enable_auto_renew()
+        self.assertTrue(sub.auto_renew)
         with self.assertRaises(SubscriptionExpiredException):
             sub.is_valid("2028-01-01")
 

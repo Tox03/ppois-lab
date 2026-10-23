@@ -36,3 +36,7 @@ class Sanction:
         """Продлевает срок действия наложенного ограничения."""
         self.duration_days += max(0, extra_days)
         return self.duration_days
+
+    def apply_sanction(self) -> None:
+        """Повторно активирует ранее снятую санкцию."""
+        self.is_revoked = False

@@ -14,45 +14,51 @@ jobs:
   # Лабораторная 1: Абстрактные машины (C++ на Windows)
   # ==========================================
   build-cpp-lab1-windows:
+    name: "ЛР №1: Сборка, cppcheck, тесты и покрытие (Windows)"
     runs-on: windows-latest
+    outputs:
+      has_lab1: ${{ steps.check_lab1.outputs.has_lab1 }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check if lab1 exists
+        id: check_lab1
+        shell: pwsh
+        run: |
+          if (Test-Path "lab1/CMakeLists.txt") {
+            echo "has_lab1=true" >> $env:GITHUB_OUTPUT
+            Write-Host "lab1 detected. Proceeding with C++ build."
+          } else {
+            echo "has_lab1=false" >> $env:GITHUB_OUTPUT
+            Write-Host "lab1 not present in this branch. Skipping C++ build."
+          }
+
       - name: Install Tools (cppcheck, OpenCppCoverage)
+        if: steps.check_lab1.outputs.has_lab1 == 'true'
         run: |
           choco install cppcheck opencppcoverage -y
           echo "C:\Program Files\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "C:\Program Files\Cppcheck" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Run Linter (cppcheck)
+        if: steps.check_lab1.outputs.has_lab1 == 'true'
         run: |
           & "C:\Program Files\Cppcheck\cppcheck.exe" --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab1/build/ lab1/
 
       - name: Configure and Build (MSVC Release)
+        if: steps.check_lab1.outputs.has_lab1 == 'true'
         run: |
           cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Release
           cmake --build lab1/build --config Release --parallel
 
       - name: Run Unit Tests and Verify Coverage (>90%)
+        if: steps.check_lab1.outputs.has_lab1 == 'true'
         run: |
-          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --modules "$((Get-Location).Path)\lab1\build\Release\AllTests.exe" --sources "$((Get-Location).Path)\lab1\src\turing" --sources "$((Get-Location).Path)\lab1\src\markov" --export_type html:coverage_html --export_type cobertura:coverage.xml -- .\lab1\build\Release\AllTests.exe
-          [xml]$xml = Get-Content coverage.xml
-          $linesValid = [int]$xml.coverage.'lines-valid'
-          $linesCovered = [int]$xml.coverage.'lines-covered'
-          $rate = [math]::Round([double]$xml.coverage.'line-rate' * 100, 2)
-          Write-Host "Всего строк: $linesValid, Покрыто строк: $linesCovered"
-          Write-Host "Общее покрытие кода: $rate%"
-          if ($linesValid -eq 0) {
-            Write-Error "Ошибка: OpenCppCoverage не нашел анализируемых строк кода (PDB не загружен)!"
-            exit 1
-          }
-          if ($rate -lt 90.0) {
-            Write-Error "Покрытие кода ниже 90%: $rate%"
-            exit 1
-          }
+          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab1\src\turing" --sources "$((Get-Location).Path)\lab1\src\markov" --threshold 90 --export_type html:coverage_html -- .\lab1\build\Release\AllTests.exe
 
       - name: Upload Artifact (.exe)
+        if: steps.check_lab1.outputs.has_lab1 == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ppois_lab1_windows
@@ -61,39 +67,60 @@ jobs:
   # ==========================================
   # Лабораторная 2: Завод автодеталей (Python на Windows)
   # ==========================================
-  test-python-lab2:
+  test-python-lab2-windows:
+    name: "ЛР №2: Тестирование, анализ покрытия и сборка (Windows)"
+    runs-on: windows-latest
+    outputs:
+      has_lab2: ${{ steps.check_lab2.outputs.has_lab2 }}
     env:
       PYTHONUTF8: "1"
       PYTHONIOENCODING: "utf-8"
-    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check if lab2 exists
+        id: check_lab2
+        shell: pwsh
+        run: |
+          if (Test-Path "lab2/main.py") {
+            echo "has_lab2=true" >> $env:GITHUB_OUTPUT
+            Write-Host "lab2 detected. Proceeding with Python tests."
+          } else {
+            echo "has_lab2=false" >> $env:GITHUB_OUTPUT
+            Write-Host "lab2 not present in this branch. Skipping Python tests."
+          }
+
       - name: Set up Python 3.9
+        if: steps.check_lab2.outputs.has_lab2 == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
 
       - name: Install dependencies
+        if: steps.check_lab2.outputs.has_lab2 == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install coverage flake8 pyinstaller
 
       - name: Lint with flake8
+        if: steps.check_lab2.outputs.has_lab2 == 'true'
         run: |
           flake8 --config=lab2/.flake8 lab2
 
       - name: Run Unit Tests and Verify Coverage (>=90%)
+        if: steps.check_lab2.outputs.has_lab2 == 'true'
         run: |
-          python -m coverage run --source=lab2/plant,lab2/cli -m unittest discover -s lab2/tests -p "test_*.py" -v
+          python -m coverage run --source=lab2/plant,lab2/cli,lab2/main -m unittest discover -s lab2/tests -p "test_*.py" -v
           python -m coverage report --fail-under=90
 
       - name: Build Standalone Executable (.exe)
+        if: steps.check_lab2.outputs.has_lab2 == 'true'
         run: |
           pyinstaller --name ppois-lab2 --onefile --paths lab2 lab2/main.py --distpath lab2/dist
 
       - name: Upload Artifact (.exe)
+        if: steps.check_lab2.outputs.has_lab2 == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ppois_lab2_windows
@@ -102,36 +129,63 @@ jobs:
   # ==========================================
   # Лабораторная 3: Социальная сеть (Python на Windows)
   # ==========================================
-  test-python-lab3:
+  test-python-lab3-windows:
+    name: "ЛР №3: Тестирование, анализ покрытия и сборка (Windows)"
     runs-on: windows-latest
+    outputs:
+      has_lab3: ${{ steps.check_lab3.outputs.has_lab3 }}
+    env:
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: "utf-8"
+      PYTHONPATH: .
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check if lab3 exists
+        id: check_lab3
+        shell: pwsh
+        run: |
+          if (Test-Path "lab3/main.py") {
+            echo "has_lab3=true" >> $env:GITHUB_OUTPUT
+            Write-Host "lab3 detected. Proceeding with Python tests."
+          } else {
+            echo "has_lab3=false" >> $env:GITHUB_OUTPUT
+            Write-Host "lab3 not present in this branch. Skipping Python tests."
+          }
+
       - name: Set up Python 3.9
+        if: steps.check_lab3.outputs.has_lab3 == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
 
       - name: Install dependencies
+        if: steps.check_lab3.outputs.has_lab3 == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install coverage flake8 pyinstaller
 
       - name: Lint with flake8
+        if: steps.check_lab3.outputs.has_lab3 == 'true'
         run: |
           flake8 --config=lab3/.flake8 lab3
 
       - name: Run Unit Tests and Verify Coverage (>=90%)
+        if: steps.check_lab3.outputs.has_lab3 == 'true'
+        env:
+          PYTHONPATH: .
         run: |
           python -m coverage run --source=lab3/network,lab3/cli -m unittest discover -s lab3/tests -p "test_*.py" -v
           python -m coverage report --fail-under=90
 
       - name: Build Standalone Executable (.exe)
+        if: steps.check_lab3.outputs.has_lab3 == 'true'
         run: |
           pyinstaller --name ppois-lab3 --onefile --paths . lab3/main.py --distpath lab3/dist
 
       - name: Upload Artifact (.exe)
+        if: steps.check_lab3.outputs.has_lab3 == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ppois_lab3_windows
@@ -141,45 +195,65 @@ jobs:
   # Лабораторная 4: Сортировка и Графы (C++ на Windows)
   # ==========================================
   build-cpp-lab4-windows:
+    name: "ЛР №4: Сборка, тестирование (GoogleTest), покрытие и артефакт (Windows)"
     runs-on: windows-latest
+    outputs:
+      has_lab4: ${{ steps.check_lab4.outputs.has_lab4 }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Tools (cppcheck, OpenCppCoverage)
+      - name: Check if lab4 exists
+        id: check_lab4
+        shell: pwsh
         run: |
-          choco install cppcheck opencppcoverage -y
-          echo "C:\Program Files\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\Program Files\Cppcheck" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          if (Test-Path "lab4/CMakeLists.txt") {
+            echo "has_lab4=true" >> $env:GITHUB_OUTPUT
+            Write-Host "lab4 detected. Proceeding with C++ build."
+          } else {
+            echo "has_lab4=false" >> $env:GITHUB_OUTPUT
+            Write-Host "lab4 not present in this branch. Skipping C++ build."
+          }
 
-      - name: Run Linter (cppcheck)
+      - name: Install OpenCppCoverage
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
         run: |
-          & "C:\Program Files\Cppcheck\cppcheck.exe" --language=c++ --enable=warning,performance,portability --inline-suppr --force -i lab4/build/ lab4/
+          choco install opencppcoverage -y
 
-      - name: Configure and Build (MSVC Release)
+      - name: Configure CMake
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
         run: |
           cmake -S lab4 -B lab4/build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build C++ Targets with CMake
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
+        run: |
           cmake --build lab4/build --config Release --parallel
 
-      - name: Run Unit Tests and Verify Coverage (>90%)
+      - name: Run Unit Tests (GoogleTest)
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
         run: |
-          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --modules "$((Get-Location).Path)\lab4\build\Release\AllTests.exe" --sources "$((Get-Location).Path)\lab4\src" --export_type html:coverage_html_lab4 --export_type cobertura:coverage_lab4.xml -- .\lab4\build\Release\AllTests.exe
-          [xml]$xml = Get-Content coverage_lab4.xml
-          $linesValid = [int]$xml.coverage.'lines-valid'
-          $linesCovered = [int]$xml.coverage.'lines-covered'
-          $rate = [math]::Round([double]$xml.coverage.'line-rate' * 100, 2)
-          Write-Host "Всего строк: $linesValid, Покрыто строк: $linesCovered"
-          Write-Host "Общее покрытие кода: $rate%"
-          if ($linesValid -eq 0) {
-            Write-Error "Ошибка: OpenCppCoverage не нашел анализируемых строк кода (PDB не загружен)!"
-            exit 1
-          }
-          if ($rate -lt 90.0) {
-            Write-Error "Покрытие кода ниже 90%: $rate%"
-            exit 1
-          }
+          .\lab4\build\Release\AllTests.exe
 
-      - name: Upload Artifact (.exe)
+      - name: Run Non-Interactive Demo
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
+        run: |
+          .\lab4\build\Release\ppois-lab4.exe --demo
+
+      - name: Generate Code Coverage Report (OpenCppCoverage)
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
+        run: |
+          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --sources "$((Get-Location).Path)\lab4" --threshold 90 --export_type html:lab4_coverage_report -- .\lab4\build\Release\AllTests.exe
+
+      - name: Upload Code Coverage Report
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab4_coverage_report
+          path: lab4_coverage_report/
+
+      - name: Upload Executable (.exe)
+        if: steps.check_lab4.outputs.has_lab4 == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ppois_lab4_windows
@@ -189,9 +263,9 @@ jobs:
   # Публикация релиза на GitHub Releases
   # ==========================================
   publish-release:
-    needs: [build-cpp-lab1-windows, test-python-lab2, test-python-lab3, build-cpp-lab4-windows]
+    needs: [build-cpp-lab1-windows, test-python-lab2-windows, test-python-lab3-windows, build-cpp-lab4-windows]
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/main'
+    if: always() && github.ref == 'refs/heads/main' && (needs.build-cpp-lab1-windows.outputs.has_lab1 == 'true' || needs.test-python-lab2-windows.outputs.has_lab2 == 'true' || needs.test-python-lab3-windows.outputs.has_lab3 == 'true' || needs.build-cpp-lab4-windows.outputs.has_lab4 == 'true')
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4

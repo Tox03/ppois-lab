@@ -22,24 +22,24 @@
 | Appeal | 6 | 4 | Sanction, UserAccount |
 | AudioMessage | 5 | 3 | InvalidContentException |
 | AuditLog | 5 | 3 | UserAccount |
-| BannedWordFilter | 4 | 3 | InvalidContentException |
-| BlockRecord | 5 | 3 | UserAccount |
+| BannedWordFilter | 4 | 4 | InvalidContentException |
+| BlockRecord | 5 | 4 | UserAccount |
 | CallSession | 6 | 3 | UserAccount |
 | Chat | 5 | 3 | — |
-| ChatMember | 5 | 3 | UserAccount |
+| ChatMember | 5 | 4 | UserAccount |
 | ChatMessage | 6 | 3 | Chat, UserAccount |
-| Comment | 6 | 4 | Post, Reaction, UserAccount |
+| Comment | 6 | 5 | Post, Reaction, UserAccount |
 | ContactInfo | 5 | 3 | InvalidContentException |
 | ContentFilter | 5 | 3 | ContentBlockedException |
-| DataBackup | 6 | 3 | — |
+| DataBackup | 6 | 4 | — |
 | DirectMessage | 6 | 3 | AccessDeniedException, UserAccount |
 | EngagementMetrics | 6 | 3 | Post |
-| Feed | 5 | 3 | FeedItem, UserAccount |
+| Feed | 5 | 4 | FeedItem, UserAccount |
 | FeedItem | 5 | 4 | Post |
 | Follow | 4 | 3 | UserAccount |
 | FriendRequest | 5 | 3 | Friendship, UserAccount |
 | Friendship | 5 | 3 | UserAccount |
-| GroupChat | 6 | 4 | Chat, ChatMember, GroupCapacityExceededException |
+| GroupChat | 6 | 5 | Chat, ChatMember, GroupCapacityExceededException |
 | GroupEvent | 6 | 3 | GroupCapacityExceededException, UserAccount |
 | GroupMembership | 5 | 3 | InsufficientPrivilegesException, UserAccount |
 | Hashtag | 4 | 3 | InvalidContentException |
@@ -51,28 +51,28 @@
 | NotificationBatch | 5 | 3 | Notification, UserAccount |
 | NotificationChannel | 5 | 3 | Notification |
 | PollOption | 4 | 3 | — |
-| PollPost | 6 | 4 | InvalidContentException, PollOption, Post |
-| Post | 6 | 4 | ContentBlockedException, InvalidContentException, UserAccount |
+| PollPost | 6 | 5 | InvalidContentException, PollOption, Post |
+| Post | 6 | 5 | ContentBlockedException, InvalidContentException, UserAccount |
 | Reaction | 4 | 3 | UserAccount |
 | RecommendationEngine | 4 | 3 | Post, UserAccount |
-| Sanction | 6 | 3 | UserAccount |
+| Sanction | 6 | 4 | UserAccount |
 | SearchService | 5 | 3 | Hashtag, Post, UserAccount |
 | SecurityLog | 6 | 3 | UserAccount |
 | SessionToken | 6 | 3 | AuthenticationException, UserAccount |
-| SocialNetworkSystem | 7 | 5 | Post, RateLimitExceededException, UserAccount, UserNotFoundException |
+| SocialNetworkSystem | 7 | 7 | Post, RateLimitExceededException, UserAccount, UserNotFoundException |
 | Story | 6 | 4 | UserAccount |
 | StoryViewer | 4 | 3 | UserAccount |
-| Subscription | 6 | 4 | SubscriptionExpiredException, SubscriptionTier, UserAccount |
+| Subscription | 6 | 5 | SubscriptionExpiredException, SubscriptionTier, UserAccount |
 | SubscriptionTier | 5 | 3 | — |
 | TextPost | 6 | 3 | Post |
 | Transaction | 6 | 4 | PaymentFailedException, Wallet |
 | TrendAnalyzer | 4 | 3 | Hashtag |
-| TwoFactorAuth | 5 | 3 | AuthenticationException, UserAccount |
+| TwoFactorAuth | 5 | 4 | AuthenticationException, UserAccount |
 | UserAccount | 6 | 6 | AuthenticationException, UserProfile, UserSettings |
-| UserActivity | 5 | 3 | UserAccount |
-| UserGroup | 6 | 5 | GroupMembership, UserAccount |
+| UserActivity | 5 | 4 | UserAccount |
+| UserGroup | 6 | 6 | GroupMembership, UserAccount |
 | UserPrivacy | 5 | 3 | AccessDeniedException |
-| UserProfile | 5 | 3 | ContactInfo, UserPrivacy |
+| UserProfile | 5 | 4 | ContactInfo, UserPrivacy |
 | UserReputation | 5 | 4 | UserAccount |
 | UserSettings | 5 | 3 | — |
 | UserStatistic | 6 | 3 | UserAccount |
@@ -106,7 +106,7 @@
 | Доменные классы | 62 | — |
 | Исключения | 16 | не менее 12 |
 | Поля (суммарно) | 350 | не менее 150 |
-| Поведения (методы) | 209 | не менее 100 |
+| Поведения (методы) | 226 | не менее 100 |
 | Ассоциации | 111 | не менее 30 |
 | Файлов с >1 классом | 0 | 0 (запрещено) |
 
@@ -129,7 +129,7 @@
 #### Класс `UserActivity`
 *Отслеживает историю авторизаций, серию посещений и сетевой статус.*
 - **Поля (5)**: `current_status`, `is_online`, `last_login_at`, `login_streak_days`, `total_sessions`
-- **Методы (3)**: `record_login()`, `set_status()`, `go_offline()`
+- **Методы (4)**: `record_login()`, `set_status()`, `go_offline()`, `go_online()`
 - **Ассоциации**: UserAccount
 
 #### Класс `UserPrivacy`
@@ -141,7 +141,7 @@
 #### Класс `UserProfile`
 *Представляет публичный профиль участника социальной сети.*
 - **Поля (5)**: `avatar_url`, `bio`, `birth_date`, `is_verified`, `website`
-- **Методы (3)**: `update_bio()`, `verify_profile()`, `format_profile_card()`
+- **Методы (4)**: `update_bio()`, `verify_profile()`, `format_profile_card()`, `unverify_profile()`
 - **Ассоциации**: ContactInfo, UserPrivacy
 
 #### Класс `UserReputation`
@@ -166,7 +166,7 @@
 #### Класс `Comment`
 *Представляет комментарий пользователя под записью.*
 - **Поля (6)**: `author_id`, `comment_id`, `is_hidden`, `likes_count`, `post_id`, `text`
-- **Методы (4)**: `like()`, `hide()`, `edit_text()`, `belongs_to_post()`
+- **Методы (5)**: `like()`, `hide()`, `edit_text()`, `belongs_to_post()`, `unhide()`
 - **Ассоциации**: Post, Reaction, UserAccount
 
 #### Класс `Hashtag`
@@ -195,13 +195,13 @@
 #### Класс `PollPost`
 *Публикация с голосованием и вариантами ответов.*
 - **Поля (6)**: `is_anonymous`, `is_closed`, `max_choices`, `post_id`, `question`, `total_votes`
-- **Методы (4)**: `close_poll()`, `add_vote()`, `calculate_results()`, `can_vote()`
+- **Методы (5)**: `close_poll()`, `add_vote()`, `calculate_results()`, `can_vote()`, `reopen_poll()`
 - **Ассоциации**: InvalidContentException, PollOption, Post
 
 #### Класс `Post`
 *Представляет запись на стене пользователя или в ленте социальной сети.*
 - **Поля (6)**: `author_id`, `created_at`, `is_deleted`, `is_pinned`, `post_id`, `text_content`
-- **Методы (4)**: `pin()`, `unpin()`, `soft_delete()`, `edit_content()`
+- **Методы (5)**: `pin()`, `unpin()`, `soft_delete()`, `edit_content()`, `restore()`
 - **Ассоциации**: ContentBlockedException, InvalidContentException, UserAccount
 
 #### Класс `Reaction`
@@ -250,7 +250,7 @@
 #### Класс `ChatMember`
 *Определяет роль и статус участника группового чата.*
 - **Поля (5)**: `chat_id`, `is_banned`, `joined_at`, `member_id`, `role`
-- **Методы (3)**: `promote_to_admin()`, `demote()`, `ban()`
+- **Методы (4)**: `promote_to_admin()`, `demote()`, `ban()`, `unban()`
 - **Ассоциации**: UserAccount
 
 #### Класс `ChatMessage`
@@ -268,7 +268,7 @@
 #### Класс `GroupChat`
 *Управляет групповой многопользовательской беседой.*
 - **Поля (6)**: `admin_id`, `chat_id`, `invite_code`, `is_muted`, `members_limit`, `title`
-- **Методы (4)**: `add_participant()`, `remove_participant()`, `generate_invite()`, `mute()`
+- **Методы (5)**: `add_participant()`, `remove_participant()`, `generate_invite()`, `mute()`, `unmute()`
 - **Ассоциации**: Chat, ChatMember, GroupCapacityExceededException
 
 ### Социальный граф, дружба и сообщества (`network/relations/`)
@@ -276,7 +276,7 @@
 #### Класс `BlockRecord`
 *Представляет запись о блокировке нежелательного пользователя.*
 - **Поля (5)**: `blocked_id`, `blocker_id`, `created_at`, `is_active`, `reason`
-- **Методы (3)**: `deactivate()`, `matches_pair()`, `format_block_notice()`
+- **Методы (4)**: `deactivate()`, `matches_pair()`, `format_block_notice()`, `activate()`
 - **Ассоциации**: UserAccount
 
 #### Класс `Follow`
@@ -312,7 +312,7 @@
 #### Класс `UserGroup`
 *Представляет публичное или закрытое сообщество по интересам.*
 - **Поля (6)**: `description`, `group_id`, `is_closed`, `is_verified`, `name`, `owner_id`
-- **Методы (5)**: `verify_group()`, `close_group()`, `open_group()`, `update_info()`, `has_member()`
+- **Методы (6)**: `verify_group()`, `close_group()`, `open_group()`, `update_info()`, `has_member()`, `unverify_group()`
 - **Ассоциации**: GroupMembership, UserAccount
 
 ### Служба модерации, цензура и безопасность (`network/moderation/`)
@@ -332,7 +332,7 @@
 #### Класс `BannedWordFilter`
 *Осуществляет лексический анализ и цензурирование текста.*
 - **Поля (4)**: `banned_words_count`, `case_sensitive`, `replacement_symbol`, `strict_mode`
-- **Методы (3)**: `contains_banned_word()`, `censor_text()`, `add_keyword()`
+- **Методы (4)**: `contains_banned_word()`, `censor_text()`, `add_keyword()`, `remove_keyword()`
 - **Ассоциации**: InvalidContentException
 
 #### Класс `ContentFilter`
@@ -356,7 +356,7 @@
 #### Класс `Sanction`
 *Представляет ограничение (бан, мут, предупреждение), наложенное на аккаунт.*
 - **Поля (6)**: `duration_days`, `is_revoked`, `reason`, `sanction_id`, `sanction_type`, `user_id`
-- **Методы (3)**: `revoke()`, `is_active_sanction()`, `extend_duration()`
+- **Методы (4)**: `revoke()`, `is_active_sanction()`, `extend_duration()`, `apply_sanction()`
 - **Ассоциации**: UserAccount
 
 ### Экономика платформы, реклама и подписки (`network/monetization/`)
@@ -376,7 +376,7 @@
 #### Класс `Subscription`
 *Управляет активной платной подпиской на автора или сервис.*
 - **Поля (6)**: `auto_renew`, `creator_id`, `expires_at`, `subscription_id`, `tier_name`, `user_id`
-- **Методы (4)**: `renew()`, `cancel_auto_renew()`, `is_valid()`, `belongs_to_subscriber()`
+- **Методы (5)**: `renew()`, `cancel_auto_renew()`, `is_valid()`, `belongs_to_subscriber()`, `enable_auto_renew()`
 - **Ассоциации**: SubscriptionExpiredException, SubscriptionTier, UserAccount
 
 #### Класс `SubscriptionTier`
@@ -413,7 +413,7 @@
 #### Класс `Feed`
 *Формирует и ранжирует новостную ленту для пользователя.*
 - **Поля (5)**: `algorithm_type`, `include_ads`, `items_count`, `refresh_interval_sec`, `user_id`
-- **Методы (3)**: `add_item()`, `filter_by_algorithm()`, `clear_feed()`
+- **Методы (4)**: `add_item()`, `filter_by_algorithm()`, `clear_feed()`, `remove_item()`
 - **Ассоциации**: FeedItem, UserAccount
 
 #### Класс `FeedItem`
@@ -477,7 +477,7 @@
 #### Класс `TwoFactorAuth`
 *Управляет подтверждением входа через TOTP-коды или резервные ключи.*
 - **Поля (5)**: `backup_codes_left`, `is_enabled`, `method`, `secret_hash`, `user_id`
-- **Методы (3)**: `verify_otp()`, `enable_2fa()`, `use_backup_code()`
+- **Методы (4)**: `verify_otp()`, `enable_2fa()`, `use_backup_code()`, `disable_2fa()`
 - **Ассоциации**: AuthenticationException, UserAccount
 
 ### Системный фасад и поисковые индексы (`network/system/`)
@@ -485,7 +485,7 @@
 #### Класс `DataBackup`
 *Управляет созданием и проверкой целостности бэкапов социальной сети.*
 - **Поля (6)**: `backup_id`, `checksum`, `file_path`, `is_encrypted`, `size_mb`, `status`
-- **Методы (3)**: `create_snapshot()`, `verify_checksum()`, `mark_corrupted()`
+- **Методы (4)**: `create_snapshot()`, `verify_checksum()`, `mark_corrupted()`, `restore_snapshot()`
 
 #### Класс `SearchService`
 *Обеспечивает полнотекстовый поиск по пользователям, публикациям и тегам.*
@@ -496,6 +496,6 @@
 #### Класс `SocialNetworkSystem`
 *Центральный координатор доменной модели социальной сети.*
 - **Поля (7)**: `is_maintenance_mode`, `max_daily_posts`, `network_name`, `posts_count`, `support_email`, `users_count`, `version`
-- **Методы (5)**: `register_user()`, `publish_post()`, `enable_maintenance()`, `disable_maintenance()`, `generate_system_report()`
+- **Методы (7)**: `register_user()`, `publish_post()`, `enable_maintenance()`, `disable_maintenance()`, `generate_system_report()`, `remove_user()`, `delete_post()`
 - **Ассоциации**: Post, RateLimitExceededException, UserAccount, UserNotFoundException
 
