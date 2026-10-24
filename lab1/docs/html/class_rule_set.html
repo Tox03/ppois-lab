@@ -1,0 +1,707 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Abstract Machines Suite (Lab 1): Класс RuleSet</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Abstract Machines Suite (Lab 1)<span id="projectnumber">&#160;1.0.0</span>
+   </div>
+   <div id="projectbrief">Turing Machine and Markov Normal Algorithms Implementation in C++</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Поиск" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_rule_set.html','','class_rule_set-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Класс RuleSet</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Класс, представляющий набор правил для Машины Тьюринга.  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_rule_set_8h_source.html">RuleSet.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:aa61e901c63fa425515e8a0d4b58c8ff8" id="r_aa61e901c63fa425515e8a0d4b58c8ff8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa61e901c63fa425515e8a0d4b58c8ff8">RuleSet</a> ()=default</td></tr>
+<tr class="memdesc:aa61e901c63fa425515e8a0d4b58c8ff8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Конструктор по умолчанию.  <br /></td></tr>
+<tr class="memitem:add9aecd09975bd77fb5d47ddbc7c54fc" id="r_add9aecd09975bd77fb5d47ddbc7c54fc"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#add9aecd09975bd77fb5d47ddbc7c54fc">add_rule</a> (const <a class="el" href="struct_rule.html">Rule</a> &amp;rule)</td></tr>
+<tr class="memdesc:add9aecd09975bd77fb5d47ddbc7c54fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Добавляет новое правило или заменяет существующее.  <br /></td></tr>
+<tr class="memitem:adf002cf5780ec6b666be2987e9d805e2" id="r_adf002cf5780ec6b666be2987e9d805e2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#adf002cf5780ec6b666be2987e9d805e2">remove_rule</a> (const std::string &amp;state, char symbol)</td></tr>
+<tr class="memdesc:adf002cf5780ec6b666be2987e9d805e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Удаляет правило из набора.  <br /></td></tr>
+<tr class="memitem:a1b10c90941e5e7177160dce9599578df" id="r_a1b10c90941e5e7177160dce9599578df"><td class="memItemLeft"><a class="el" href="class_rule_set.html">RuleSet</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a1b10c90941e5e7177160dce9599578df">operator+=</a> (const <a class="el" href="struct_rule.html">Rule</a> &amp;rule)</td></tr>
+<tr class="memdesc:a1b10c90941e5e7177160dce9599578df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Добавляет правило к текущему набору.  <br /></td></tr>
+<tr class="memitem:a2cd4a5c07b12b86a69a27a0736719340" id="r_a2cd4a5c07b12b86a69a27a0736719340"><td class="memItemLeft"><a class="el" href="class_rule_set.html">RuleSet</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2cd4a5c07b12b86a69a27a0736719340">operator+</a> (const <a class="el" href="struct_rule.html">Rule</a> &amp;rule) const</td></tr>
+<tr class="memdesc:a2cd4a5c07b12b86a69a27a0736719340"><td class="mdescLeft">&#160;</td><td class="mdescRight">Создает новый набор правил с добавленным правилом.  <br /></td></tr>
+<tr class="memitem:a3a5a85d005b4d8e29d2dbdb43238f553" id="r_a3a5a85d005b4d8e29d2dbdb43238f553"><td class="memItemLeft"><a class="el" href="class_rule_set.html">RuleSet</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a3a5a85d005b4d8e29d2dbdb43238f553">operator-=</a> (const <a class="el" href="struct_rule.html">Rule</a> &amp;rule)</td></tr>
+<tr class="memdesc:a3a5a85d005b4d8e29d2dbdb43238f553"><td class="mdescLeft">&#160;</td><td class="mdescRight">Удаляет правило из текущего набора.  <br /></td></tr>
+<tr class="memitem:a2c87928fe2b9e80ccbb64091d3adcc7e" id="r_a2c87928fe2b9e80ccbb64091d3adcc7e"><td class="memItemLeft"><a class="el" href="class_rule_set.html">RuleSet</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2c87928fe2b9e80ccbb64091d3adcc7e">operator-</a> (const <a class="el" href="struct_rule.html">Rule</a> &amp;rule) const</td></tr>
+<tr class="memdesc:a2c87928fe2b9e80ccbb64091d3adcc7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Создает новый набор правил без указанного правила.  <br /></td></tr>
+<tr class="memitem:aaf97e437b5bde2899ddedc50f9755335" id="r_aaf97e437b5bde2899ddedc50f9755335"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aaf97e437b5bde2899ddedc50f9755335">find_rule</a> (const std::string &amp;state, char symbol, <a class="el" href="struct_rule.html">Rule</a> &amp;out) const</td></tr>
+<tr class="memdesc:aaf97e437b5bde2899ddedc50f9755335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ищет правило для заданного состояния и символа.  <br /></td></tr>
+<tr class="memitem:ad7fe34acfb89fa1eb04b13d7f54faf66" id="r_ad7fe34acfb89fa1eb04b13d7f54faf66"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad7fe34acfb89fa1eb04b13d7f54faf66">load_from_stream</a> (std::istream &amp;is)</td></tr>
+<tr class="memdesc:ad7fe34acfb89fa1eb04b13d7f54faf66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Считывает правила из потока до конца ввода.  <br /></td></tr>
+<tr class="memitem:a53b8a184cb571aa274339d743149b004" id="r_a53b8a184cb571aa274339d743149b004"><td class="memItemLeft">size_t&#160;</td><td class="memItemRight"><a class="el" href="#a53b8a184cb571aa274339d743149b004">size</a> () const</td></tr>
+<tr class="memdesc:a53b8a184cb571aa274339d743149b004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Возвращает количество правил в наборе.  <br /></td></tr>
+<tr class="memitem:a1139ed1a2f8132a3f9bbbe2b4b1fce7f" id="r_a1139ed1a2f8132a3f9bbbe2b4b1fce7f"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1139ed1a2f8132a3f9bbbe2b4b1fce7f">empty</a> () const</td></tr>
+<tr class="memdesc:a1139ed1a2f8132a3f9bbbe2b4b1fce7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Проверяет, пуст ли набор правил.  <br /></td></tr>
+<tr class="memitem:a0fbae3911a69008b21d42b476f077f08" id="r_a0fbae3911a69008b21d42b476f077f08"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0fbae3911a69008b21d42b476f077f08">clear</a> ()</td></tr>
+<tr class="memdesc:a0fbae3911a69008b21d42b476f077f08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Очищает все правила.  <br /></td></tr>
+<tr class="memitem:a10a1ec63568df672fc1e28a72a9e2f4e" id="r_a10a1ec63568df672fc1e28a72a9e2f4e"><td class="memItemLeft">const std::map&lt; std::pair&lt; std::string, char &gt;, <a class="el" href="struct_rule.html">Rule</a> &gt; &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a10a1ec63568df672fc1e28a72a9e2f4e">get_all_rules</a> () const</td></tr>
+<tr class="memdesc:a10a1ec63568df672fc1e28a72a9e2f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Возвращает константную ссылку на словарь всех правил.  <br /></td></tr>
+<tr class="memitem:a9e49f12b4055bcc413d21bee39f41884" id="r_a9e49f12b4055bcc413d21bee39f41884"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a9e49f12b4055bcc413d21bee39f41884">operator==</a> (const <a class="el" href="class_rule_set.html">RuleSet</a> &amp;other) const</td></tr>
+<tr class="memdesc:a9e49f12b4055bcc413d21bee39f41884"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сравнивает два набора правил на равенство.  <br /></td></tr>
+<tr class="memitem:adaab0b6d69fe2f69f72cac642778bf64" id="r_adaab0b6d69fe2f69f72cac642778bf64"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#adaab0b6d69fe2f69f72cac642778bf64">operator!=</a> (const <a class="el" href="class_rule_set.html">RuleSet</a> &amp;other) const</td></tr>
+<tr class="memdesc:adaab0b6d69fe2f69f72cac642778bf64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сравнивает два набора правил на неравенство.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Закрытые данные</h2></td></tr>
+<tr class="memitem:aa57ac234d8cc82f7348558448588f603" id="r_aa57ac234d8cc82f7348558448588f603"><td class="memItemLeft">std::map&lt; std::pair&lt; std::string, char &gt;, <a class="el" href="struct_rule.html">Rule</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa57ac234d8cc82f7348558448588f603">rules</a></td></tr>
+<tr class="memdesc:aa57ac234d8cc82f7348558448588f603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Словарь правил. Ключ - пара (состояние, символ), значение - само правило.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
+Друзья</h2></td></tr>
+<tr class="memitem:a7acd199aba64c09a5dfb392d6c8bdbca" id="r_a7acd199aba64c09a5dfb392d6c8bdbca"><td class="memItemLeft">std::ostream &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a7acd199aba64c09a5dfb392d6c8bdbca">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="class_rule_set.html">RuleSet</a> &amp;rs)</td></tr>
+<tr class="memdesc:a7acd199aba64c09a5dfb392d6c8bdbca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выводит все правила в поток.  <br /></td></tr>
+<tr class="memitem:a41aa124b2601dfd9d95491d132e45e26" id="r_a41aa124b2601dfd9d95491d132e45e26"><td class="memItemLeft">std::istream &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a41aa124b2601dfd9d95491d132e45e26">operator&gt;&gt;</a> (std::istream &amp;is, <a class="el" href="class_rule_set.html">RuleSet</a> &amp;rs)</td></tr>
+<tr class="memdesc:a41aa124b2601dfd9d95491d132e45e26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Считывает правила из потока.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Класс, представляющий набор правил для Машины Тьюринга. </p>
+<p>Хранит правила в словаре (map) для быстрого поиска по комбинации "текущее состояние + считанный символ". </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Конструктор(ы)</h2>
+<a id="aa61e901c63fa425515e8a0d4b58c8ff8" name="aa61e901c63fa425515e8a0d4b58c8ff8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa61e901c63fa425515e8a0d4b58c8ff8">&#9670;&#160;</a></span>RuleSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RuleSet::RuleSet </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Конструктор по умолчанию. </p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Методы</h2>
+<a id="add9aecd09975bd77fb5d47ddbc7c54fc" name="add9aecd09975bd77fb5d47ddbc7c54fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add9aecd09975bd77fb5d47ddbc7c54fc">&#9670;&#160;</a></span>add_rule()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RuleSet::add_rule </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_rule.html">Rule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rule</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Добавляет новое правило или заменяет существующее. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>Правило для добавления. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0fbae3911a69008b21d42b476f077f08" name="a0fbae3911a69008b21d42b476f077f08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fbae3911a69008b21d42b476f077f08">&#9670;&#160;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RuleSet::clear </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Очищает все правила. </p>
+
+</div>
+</div>
+<a id="a1139ed1a2f8132a3f9bbbe2b4b1fce7f" name="a1139ed1a2f8132a3f9bbbe2b4b1fce7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1139ed1a2f8132a3f9bbbe2b4b1fce7f">&#9670;&#160;</a></span>empty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RuleSet::empty </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Проверяет, пуст ли набор правил. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>true, если набор пуст. </dd></dl>
+
+</div>
+</div>
+<a id="aaf97e437b5bde2899ddedc50f9755335" name="aaf97e437b5bde2899ddedc50f9755335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf97e437b5bde2899ddedc50f9755335">&#9670;&#160;</a></span>find_rule()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RuleSet::find_rule </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>symbol</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rule.html">Rule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ищет правило для заданного состояния и символа. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Текущее состояние машины. </td></tr>
+    <tr><td class="paramname">symbol</td><td>Символ, считанный с ленты. </td></tr>
+    <tr><td class="paramname">out</td><td>Ссылка, куда будет записано найденное правило. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true, если правило найдено, иначе false. </dd></dl>
+
+</div>
+</div>
+<a id="a10a1ec63568df672fc1e28a72a9e2f4e" name="a10a1ec63568df672fc1e28a72a9e2f4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10a1ec63568df672fc1e28a72a9e2f4e">&#9670;&#160;</a></span>get_all_rules()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::map&lt; std::pair&lt; std::string, char &gt;, <a class="el" href="struct_rule.html">Rule</a> &gt; &amp; RuleSet::get_all_rules </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Возвращает константную ссылку на словарь всех правил. </p>
+
+</div>
+</div>
+<a id="ad7fe34acfb89fa1eb04b13d7f54faf66" name="ad7fe34acfb89fa1eb04b13d7f54faf66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7fe34acfb89fa1eb04b13d7f54faf66">&#9670;&#160;</a></span>load_from_stream()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RuleSet::load_from_stream </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;</td>          <td class="paramname"><span class="paramname"><em>is</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Считывает правила из потока до конца ввода. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is</td><td>Входной поток. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adaab0b6d69fe2f69f72cac642778bf64" name="adaab0b6d69fe2f69f72cac642778bf64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaab0b6d69fe2f69f72cac642778bf64">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RuleSet::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_rule_set.html">RuleSet</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сравнивает два набора правил на неравенство. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Другой набор правил. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true, если наборы отличаются. </dd></dl>
+
+</div>
+</div>
+<a id="a2cd4a5c07b12b86a69a27a0736719340" name="a2cd4a5c07b12b86a69a27a0736719340"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cd4a5c07b12b86a69a27a0736719340">&#9670;&#160;</a></span>operator+()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_rule_set.html">RuleSet</a> RuleSet::operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_rule.html">Rule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rule</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Создает новый набор правил с добавленным правилом. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>Правило для добавления. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Новый объект <a class="el" href="class_rule_set.html" title="Класс, представляющий набор правил для Машины Тьюринга.">RuleSet</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a1b10c90941e5e7177160dce9599578df" name="a1b10c90941e5e7177160dce9599578df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b10c90941e5e7177160dce9599578df">&#9670;&#160;</a></span>operator+=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_rule_set.html">RuleSet</a> &amp; RuleSet::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_rule.html">Rule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rule</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Добавляет правило к текущему набору. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>Правило для добавления. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Ссылка на текущий измененный объект. </dd></dl>
+
+</div>
+</div>
+<a id="a2c87928fe2b9e80ccbb64091d3adcc7e" name="a2c87928fe2b9e80ccbb64091d3adcc7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c87928fe2b9e80ccbb64091d3adcc7e">&#9670;&#160;</a></span>operator-()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_rule_set.html">RuleSet</a> RuleSet::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_rule.html">Rule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rule</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Создает новый набор правил без указанного правила. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>Правило, которое нужно удалить. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Новый объект <a class="el" href="class_rule_set.html" title="Класс, представляющий набор правил для Машины Тьюринга.">RuleSet</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a3a5a85d005b4d8e29d2dbdb43238f553" name="a3a5a85d005b4d8e29d2dbdb43238f553"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a5a85d005b4d8e29d2dbdb43238f553">&#9670;&#160;</a></span>operator-=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_rule_set.html">RuleSet</a> &amp; RuleSet::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_rule.html">Rule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rule</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Удаляет правило из текущего набора. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>Правило, которое нужно удалить. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Ссылка на текущий измененный объект. </dd></dl>
+
+</div>
+</div>
+<a id="a9e49f12b4055bcc413d21bee39f41884" name="a9e49f12b4055bcc413d21bee39f41884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e49f12b4055bcc413d21bee39f41884">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RuleSet::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_rule_set.html">RuleSet</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сравнивает два набора правил на равенство. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Другой набор правил. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true, если правила идентичны. </dd></dl>
+
+</div>
+</div>
+<a id="adf002cf5780ec6b666be2987e9d805e2" name="adf002cf5780ec6b666be2987e9d805e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf002cf5780ec6b666be2987e9d805e2">&#9670;&#160;</a></span>remove_rule()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RuleSet::remove_rule </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>symbol</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Удаляет правило из набора. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Текущее состояние удаляемого правила. </td></tr>
+    <tr><td class="paramname">symbol</td><td>Считываемый символ удаляемого правила. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a53b8a184cb571aa274339d743149b004" name="a53b8a184cb571aa274339d743149b004"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b8a184cb571aa274339d743149b004">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t RuleSet::size </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Возвращает количество правил в наборе. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>Число правил. </dd></dl>
+
+</div>
+</div>
+<a name="doc-related-members" id="doc-related-members"></a><h2 id="header-doc-related-members" class="groupheader">Друзья класса и относящимся к классу обозначения</h2>
+<a id="a7acd199aba64c09a5dfb392d6c8bdbca" name="a7acd199aba64c09a5dfb392d6c8bdbca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7acd199aba64c09a5dfb392d6c8bdbca">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;</td>          <td class="paramname"><span class="paramname"><em>os</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_rule_set.html">RuleSet</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Выводит все правила в поток. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">os</td><td>Выходной поток. </td></tr>
+    <tr><td class="paramname">rs</td><td>Набор правил. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Ссылка на выходной поток. </dd></dl>
+
+</div>
+</div>
+<a id="a41aa124b2601dfd9d95491d132e45e26" name="a41aa124b2601dfd9d95491d132e45e26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41aa124b2601dfd9d95491d132e45e26">&#9670;&#160;</a></span>operator&gt;&gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::istream &amp; operator&gt;&gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;</td>          <td class="paramname"><span class="paramname"><em>is</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_rule_set.html">RuleSet</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Считывает правила из потока. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is</td><td>Входной поток. </td></tr>
+    <tr><td class="paramname">rs</td><td>Набор правил. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Ссылка на входной поток. </dd></dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Данные класса</h2>
+<a id="aa57ac234d8cc82f7348558448588f603" name="aa57ac234d8cc82f7348558448588f603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa57ac234d8cc82f7348558448588f603">&#9670;&#160;</a></span>rules</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::pair&lt;std::string, char&gt;, <a class="el" href="struct_rule.html">Rule</a>&gt; RuleSet::rules</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Словарь правил. Ключ - пара (состояние, символ), значение - само правило. </p>
+
+</div>
+</div>
+<hr/>Объявления и описания членов классов находятся в файлах:<ul>
+<li>include/turing/<a class="el" href="_rule_set_8h_source.html">RuleSet.h</a></li>
+<li>src/turing/<a class="el" href="_rule_set_8cpp.html">RuleSet.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_rule_set.html">RuleSet</a></li>
+    <li class="footer">Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

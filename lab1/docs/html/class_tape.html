@@ -1,0 +1,663 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Abstract Machines Suite (Lab 1): Класс Tape</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Abstract Machines Suite (Lab 1)<span id="projectnumber">&#160;1.0.0</span>
+   </div>
+   <div id="projectbrief">Turing Machine and Markov Normal Algorithms Implementation in C++</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Поиск" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_tape.html','','class_tape-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Класс Tape</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Класс, эмулирующий бесконечную ленту Машины Тьюринга.  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_tape_8h_source.html">Tape.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:Proxy" id="r_Proxy"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_tape_1_1_proxy.html">Proxy</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вспомогательный класс (Паттерн <a class="el" href="class_tape_1_1_proxy.html" title="Вспомогательный класс (Паттерн Proxy) для безопасной работы с оператором []. Позволяет перехватывать ...">Proxy</a>) для безопасной работы с оператором []. Позволяет перехватывать операцию присваивания к ячейке ленты.  <a href="class_tape_1_1_proxy.html#details">Подробнее...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a331dcbb0b68466080d0308fb4c68d40b" id="r_a331dcbb0b68466080d0308fb4c68d40b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a331dcbb0b68466080d0308fb4c68d40b">Tape</a> (char blank='_')</td></tr>
+<tr class="memdesc:a331dcbb0b68466080d0308fb4c68d40b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Конструктор ленты.  <br /></td></tr>
+<tr class="memitem:a60fc52d0a00bebde730d81aeb3613263" id="r_a60fc52d0a00bebde730d81aeb3613263"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#a60fc52d0a00bebde730d81aeb3613263">read_symbol</a> () const</td></tr>
+<tr class="memdesc:a60fc52d0a00bebde730d81aeb3613263"><td class="mdescLeft">&#160;</td><td class="mdescRight">Считывает символ, находящийся под головкой.  <br /></td></tr>
+<tr class="memitem:a853afb37bb1ef96f731517f5d773cdcb" id="r_a853afb37bb1ef96f731517f5d773cdcb"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a853afb37bb1ef96f731517f5d773cdcb">write_symbol</a> (char symbol)</td></tr>
+<tr class="memdesc:a853afb37bb1ef96f731517f5d773cdcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Записывает символ в ячейку под головкой. Если записывается пробельный символ, ячейка удаляется из памяти.  <br /></td></tr>
+<tr class="memitem:ad43407a88d82af0d99fdacf389c07c09" id="r_ad43407a88d82af0d99fdacf389c07c09"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad43407a88d82af0d99fdacf389c07c09">move_head</a> (char direction)</td></tr>
+<tr class="memdesc:ad43407a88d82af0d99fdacf389c07c09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сдвигает головку ленты.  <br /></td></tr>
+<tr class="memitem:a4abfa082e20d0f5dae21c22eb1a9dd41" id="r_a4abfa082e20d0f5dae21c22eb1a9dd41"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4abfa082e20d0f5dae21c22eb1a9dd41">load_from_stream</a> (std::istream &amp;is)</td></tr>
+<tr class="memdesc:a4abfa082e20d0f5dae21c22eb1a9dd41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загружает начальное состояние ленты из потока.  <br /></td></tr>
+<tr class="memitem:ae7e167e7b0bc700d2638ac75f6d470b3" id="r_ae7e167e7b0bc700d2638ac75f6d470b3"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#ae7e167e7b0bc700d2638ac75f6d470b3">read_at</a> (int index) const</td></tr>
+<tr class="memdesc:ae7e167e7b0bc700d2638ac75f6d470b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Читает символ по произвольному индексу без смещения головки.  <br /></td></tr>
+<tr class="memitem:af9cadb0db184d1b181161415f05b1558" id="r_af9cadb0db184d1b181161415f05b1558"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af9cadb0db184d1b181161415f05b1558">write_at</a> (int index, char symbol)</td></tr>
+<tr class="memdesc:af9cadb0db184d1b181161415f05b1558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Записывает символ по произвольному индексу без смещения головки.  <br /></td></tr>
+<tr class="memitem:acf600996299e32e35bdfc93db54af9df" id="r_acf600996299e32e35bdfc93db54af9df"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#acf600996299e32e35bdfc93db54af9df">get_head_position</a> () const</td></tr>
+<tr class="memdesc:acf600996299e32e35bdfc93db54af9df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Получить позицию каретки (головки).  <br /></td></tr>
+<tr class="memitem:a51cd403a50847c22ace36ac65331a8e3" id="r_a51cd403a50847c22ace36ac65331a8e3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a51cd403a50847c22ace36ac65331a8e3">set_head_position</a> (int pos)</td></tr>
+<tr class="memdesc:a51cd403a50847c22ace36ac65331a8e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Установить позицию каретки (головки).  <br /></td></tr>
+<tr class="memitem:a76e191d71634749115644f6d2e25c8b4" id="r_a76e191d71634749115644f6d2e25c8b4"><td class="memItemLeft"><a class="el" href="class_tape_1_1_proxy.html">Proxy</a>&#160;</td><td class="memItemRight"><a class="el" href="#a76e191d71634749115644f6d2e25c8b4">operator[]</a> (int index)</td></tr>
+<tr class="memdesc:a76e191d71634749115644f6d2e25c8b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Оператор индексации для прямого доступа к ячейкам ленты.  <br /></td></tr>
+<tr class="memitem:a7daca6bd8be44aa6ab1575bc181d5676" id="r_a7daca6bd8be44aa6ab1575bc181d5676"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7daca6bd8be44aa6ab1575bc181d5676">operator==</a> (const <a class="el" href="class_tape.html">Tape</a> &amp;other) const</td></tr>
+<tr class="memdesc:a7daca6bd8be44aa6ab1575bc181d5676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сравнивает две ленты на равенство.  <br /></td></tr>
+<tr class="memitem:a1c649670a7da9911f8dc26b9a9f80312" id="r_a1c649670a7da9911f8dc26b9a9f80312"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1c649670a7da9911f8dc26b9a9f80312">operator!=</a> (const <a class="el" href="class_tape.html">Tape</a> &amp;other) const</td></tr>
+<tr class="memdesc:a1c649670a7da9911f8dc26b9a9f80312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сравнивает две ленты на неравенство.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Закрытые данные</h2></td></tr>
+<tr class="memitem:a4512e2903cfcd045f1eb92714f19796a" id="r_a4512e2903cfcd045f1eb92714f19796a"><td class="memItemLeft">std::map&lt; int, char &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4512e2903cfcd045f1eb92714f19796a">tape</a></td></tr>
+<tr class="memdesc:a4512e2903cfcd045f1eb92714f19796a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Внутреннее хранилище непустых ячеек ленты  <br /></td></tr>
+<tr class="memitem:a70d16c02e49651ce4c63879b33f4151f" id="r_a70d16c02e49651ce4c63879b33f4151f"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a70d16c02e49651ce4c63879b33f4151f">head_position</a></td></tr>
+<tr class="memdesc:a70d16c02e49651ce4c63879b33f4151f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Текущий индекс головки чтения/записи  <br /></td></tr>
+<tr class="memitem:a98c1df4782704b92bcbfb054aa885346" id="r_a98c1df4782704b92bcbfb054aa885346"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#a98c1df4782704b92bcbfb054aa885346">blank_symbol</a></td></tr>
+<tr class="memdesc:a98c1df4782704b92bcbfb054aa885346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Символ, считающийся "пустым" (обычно '_').  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
+Друзья</h2></td></tr>
+<tr class="memitem:a40aa2603632f9cc82417656b1a25998d" id="r_a40aa2603632f9cc82417656b1a25998d"><td class="memItemLeft">std::ostream &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a40aa2603632f9cc82417656b1a25998d">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="class_tape.html">Tape</a> &amp;t)</td></tr>
+<tr class="memdesc:a40aa2603632f9cc82417656b1a25998d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выводит заполненную часть ленты и положение головки в поток.  <br /></td></tr>
+<tr class="memitem:a7d734a1ef3e8b0195031616ec1ca618e" id="r_a7d734a1ef3e8b0195031616ec1ca618e"><td class="memItemLeft">std::istream &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a7d734a1ef3e8b0195031616ec1ca618e">operator&gt;&gt;</a> (std::istream &amp;is, <a class="el" href="class_tape.html">Tape</a> &amp;t)</td></tr>
+<tr class="memdesc:a7d734a1ef3e8b0195031616ec1ca618e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Считывает начальное состояние ленты из потока.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Класс, эмулирующий бесконечную ленту Машины Тьюринга. </p>
+<p>Лента реализована в виде разреженного массива на основе std::map. Это позволяет ленте быть бесконечной в обе стороны, не занимая память под пробельные символы. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Конструктор(ы)</h2>
+<a id="a331dcbb0b68466080d0308fb4c68d40b" name="a331dcbb0b68466080d0308fb4c68d40b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a331dcbb0b68466080d0308fb4c68d40b">&#9670;&#160;</a></span>Tape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Tape::Tape </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>blank</em></span><span class="paramdefsep"> = </span><span class="paramdefval">'_'</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Конструктор ленты. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blank</td><td>Символ, который считается пустым (пробелом). По умолчанию '_'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Методы</h2>
+<a id="acf600996299e32e35bdfc93db54af9df" name="acf600996299e32e35bdfc93db54af9df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf600996299e32e35bdfc93db54af9df">&#9670;&#160;</a></span>get_head_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Tape::get_head_position </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Получить позицию каретки (головки). </p>
+<dl class="section return"><dt>Возвращает</dt><dd>Текущий индекс головки. </dd></dl>
+
+</div>
+</div>
+<a id="a4abfa082e20d0f5dae21c22eb1a9dd41" name="a4abfa082e20d0f5dae21c22eb1a9dd41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4abfa082e20d0f5dae21c22eb1a9dd41">&#9670;&#160;</a></span>load_from_stream()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::load_from_stream </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;</td>          <td class="paramname"><span class="paramname"><em>is</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Загружает начальное состояние ленты из потока. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is</td><td>Входной поток, содержащий строку символов. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad43407a88d82af0d99fdacf389c07c09" name="ad43407a88d82af0d99fdacf389c07c09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad43407a88d82af0d99fdacf389c07c09">&#9670;&#160;</a></span>move_head()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::move_head </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>direction</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сдвигает головку ленты. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">direction</td><td>'R' - вправо, 'L' - влево. Остальные символы - стоять на месте. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1c649670a7da9911f8dc26b9a9f80312" name="a1c649670a7da9911f8dc26b9a9f80312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c649670a7da9911f8dc26b9a9f80312">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Tape::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_tape.html">Tape</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сравнивает две ленты на неравенство. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Другая лента. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true, если ленты различаются. </dd></dl>
+
+</div>
+</div>
+<a id="a7daca6bd8be44aa6ab1575bc181d5676" name="a7daca6bd8be44aa6ab1575bc181d5676"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7daca6bd8be44aa6ab1575bc181d5676">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Tape::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_tape.html">Tape</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сравнивает две ленты на равенство. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Другая лента. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true, если содержимое лент, позиция головки и пустой символ совпадают. </dd></dl>
+
+</div>
+</div>
+<a id="a76e191d71634749115644f6d2e25c8b4" name="a76e191d71634749115644f6d2e25c8b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76e191d71634749115644f6d2e25c8b4">&#9670;&#160;</a></span>operator[]()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_tape_1_1_proxy.html">Tape::Proxy</a> Tape::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Оператор индексации для прямого доступа к ячейкам ленты. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Индекс ячейки. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Объект-посредник <a class="el" href="class_tape_1_1_proxy.html" title="Вспомогательный класс (Паттерн Proxy) для безопасной работы с оператором []. Позволяет перехватывать ...">Proxy</a> для безопасного чтения/записи. </dd></dl>
+
+</div>
+</div>
+<a id="ae7e167e7b0bc700d2638ac75f6d470b3" name="ae7e167e7b0bc700d2638ac75f6d470b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7e167e7b0bc700d2638ac75f6d470b3">&#9670;&#160;</a></span>read_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Tape::read_at </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Читает символ по произвольному индексу без смещения головки. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Индекс ячейки на ленте. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Считанный символ. </dd></dl>
+
+</div>
+</div>
+<a id="a60fc52d0a00bebde730d81aeb3613263" name="a60fc52d0a00bebde730d81aeb3613263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60fc52d0a00bebde730d81aeb3613263">&#9670;&#160;</a></span>read_symbol()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Tape::read_symbol </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Считывает символ, находящийся под головкой. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>Считанный символ или пробельный символ, если ячейка пуста. </dd></dl>
+
+</div>
+</div>
+<a id="a51cd403a50847c22ace36ac65331a8e3" name="a51cd403a50847c22ace36ac65331a8e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51cd403a50847c22ace36ac65331a8e3">&#9670;&#160;</a></span>set_head_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::set_head_position </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pos</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Установить позицию каретки (головки). </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>Новый индекс головки. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af9cadb0db184d1b181161415f05b1558" name="af9cadb0db184d1b181161415f05b1558"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9cadb0db184d1b181161415f05b1558">&#9670;&#160;</a></span>write_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::write_at </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>symbol</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Записывает символ по произвольному индексу без смещения головки. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Индекс ячейки на ленте. </td></tr>
+    <tr><td class="paramname">symbol</td><td>Символ для записи. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a853afb37bb1ef96f731517f5d773cdcb" name="a853afb37bb1ef96f731517f5d773cdcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a853afb37bb1ef96f731517f5d773cdcb">&#9670;&#160;</a></span>write_symbol()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::write_symbol </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>symbol</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Записывает символ в ячейку под головкой. Если записывается пробельный символ, ячейка удаляется из памяти. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">symbol</td><td>Символ для записи. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-related-members" id="doc-related-members"></a><h2 id="header-doc-related-members" class="groupheader">Друзья класса и относящимся к классу обозначения</h2>
+<a id="a40aa2603632f9cc82417656b1a25998d" name="a40aa2603632f9cc82417656b1a25998d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40aa2603632f9cc82417656b1a25998d">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;</td>          <td class="paramname"><span class="paramname"><em>os</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_tape.html">Tape</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Выводит заполненную часть ленты и положение головки в поток. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">os</td><td>Выходной поток. </td></tr>
+    <tr><td class="paramname">t</td><td>Лента для вывода. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Ссылка на выходной поток. </dd></dl>
+
+</div>
+</div>
+<a id="a7d734a1ef3e8b0195031616ec1ca618e" name="a7d734a1ef3e8b0195031616ec1ca618e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d734a1ef3e8b0195031616ec1ca618e">&#9670;&#160;</a></span>operator&gt;&gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::istream &amp; operator&gt;&gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;</td>          <td class="paramname"><span class="paramname"><em>is</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_tape.html">Tape</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Считывает начальное состояние ленты из потока. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is</td><td>Входной поток. </td></tr>
+    <tr><td class="paramname">t</td><td>Лента для записи. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Ссылка на входной поток. </dd></dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Данные класса</h2>
+<a id="a98c1df4782704b92bcbfb054aa885346" name="a98c1df4782704b92bcbfb054aa885346"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98c1df4782704b92bcbfb054aa885346">&#9670;&#160;</a></span>blank_symbol</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Tape::blank_symbol</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Символ, считающийся "пустым" (обычно '_'). </p>
+
+</div>
+</div>
+<a id="a70d16c02e49651ce4c63879b33f4151f" name="a70d16c02e49651ce4c63879b33f4151f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70d16c02e49651ce4c63879b33f4151f">&#9670;&#160;</a></span>head_position</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Tape::head_position</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Текущий индекс головки чтения/записи </p>
+
+</div>
+</div>
+<a id="a4512e2903cfcd045f1eb92714f19796a" name="a4512e2903cfcd045f1eb92714f19796a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4512e2903cfcd045f1eb92714f19796a">&#9670;&#160;</a></span>tape</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;int, char&gt; Tape::tape</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Внутреннее хранилище непустых ячеек ленты </p>
+
+</div>
+</div>
+<hr/>Объявления и описания членов классов находятся в файлах:<ul>
+<li>include/turing/<a class="el" href="_tape_8h_source.html">Tape.h</a></li>
+<li>src/turing/<a class="el" href="_tape_8cpp.html">Tape.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_tape.html">Tape</a></li>
+    <li class="footer">Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>
